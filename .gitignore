@@ -1,8 +1,10 @@
-EdgeComputing_Project/out/
-EdgeComputing_Project/.settings/
+
 EdgeComputing_Project/.cproject
-EdgeComputing_Project/.project
 EdgeComputing_Project/.nedexclusions
 EdgeComputing_Project/.nedfolders
 EdgeComputing_Project/.oppbuildspec
+EdgeComputing_Project/.project
+/EdgeComputing_Project/out
 EdgeComputing_Project/Makefile
+EdgeComputing_Project/.settings/language.settings.xml
+EdgeComputing_Project/.settings/org.eclipse.core.resources.prefs
