@@ -10,7 +10,7 @@ void BaseStation::initialize() {
     double width = parent->par("width");
     double height = parent->par("height");
     int numBaseStations = parent->par("numBaseStations");
-    int gridSize = ceil(sqrt(numBaseStations)); // Calcola la dimensione della griglia (es: 4x4 per 10 nodi)
+    int gridSize = ceil(sqrt(numBaseStations));
 
     int myIndex = getIndex();
     int row = myIndex / gridSize;
@@ -37,7 +37,6 @@ void BaseStation::initialize() {
         }
     }
 }
-
 
 
 void BaseStation::handleMessage(cMessage *msg) {
