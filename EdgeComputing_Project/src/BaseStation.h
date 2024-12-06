@@ -1,5 +1,5 @@
-#ifndef BASESTATION_H
-#define BASESTATION_H
+#ifndef __BASESTATION_H_
+#define __BASESTATION_H_
 
 #include <omnetpp.h>
 #include <queue>
@@ -7,20 +7,24 @@
 using namespace omnetpp;
 
 class BaseStation : public cSimpleModule {
-  private:
-
-    double delay;
+private:
     double serviceRate;
+    double delay;
 
+    int queueSize;
     std::queue<cMessage*> taskQueue;
 
-  public:
-    double x;
-    double y;
+    double x, y;
 
-  protected:
+    int numBaseStations;
+
+public:
+    int getQueueLength() const { return (int)taskQueue.size(); }
+
+protected:
     virtual void initialize() override;
     virtual void handleMessage(cMessage *msg) override;
+    cModule* findBestBaseStation();
 };
 
-#endif // BASESTATION_H
+#endif

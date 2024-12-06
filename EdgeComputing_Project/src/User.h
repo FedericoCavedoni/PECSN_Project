@@ -17,13 +17,13 @@ class User : public cSimpleModule {
     double sizeRate;
 
     cMessage *sendEvent;
-
-    cModule *findNearestBaseStation();
+    cModule *nearestBaseStation;
+    cGate *destGate;
 
   protected:
     virtual void initialize() override;
     virtual void handleMessage(cMessage *msg) override;
-    void generateAndSendTask();
+    cModule *findNearestBaseStation();
 };
 
 #endif // USER_H

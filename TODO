@@ -1,0 +1,11 @@
+.ANALISI:
+    -OBBLIGATORIO: the time required to complete a computing task for various values of N for both methods (uniform/lognormal)
+    -IDEA: numero medio di messaggi nelle code/nel sistema
+    -IDEA: throughput, response time, utilization, waiting time e stronzate simili 
+
+
+.DA RIVEDERE:
+    -Rate di I, T
+    -Mean e std dev del lognormal da vedere
+    -Size della queue messa a caso
+    

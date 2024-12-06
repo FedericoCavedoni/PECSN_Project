@@ -1,80 +1,95 @@
 #include "BaseStation.h"
+#include <cmath>
+#include <climits> // per INT_MAX
 
 Define_Module(BaseStation);
 
 void BaseStation::initialize() {
     serviceRate = par("serviceRate");
     delay = par("delay");
+    queueSize = par("queueSize");
 
     cModule *parent = getParentModule();
-    double width = parent->par("width");
-    double height = parent->par("height");
-    int numBaseStations = parent->par("numBaseStations");
-    int gridSize = ceil(sqrt(numBaseStations));
+    int width = parent->par("width");
+    int height = parent->par("height");
+
+    numBaseStations = parent->par("numBaseStations");
+
+    int gridSize = (int)ceil(sqrt((double)numBaseStations));
 
     int myIndex = getIndex();
     int row = myIndex / gridSize;
     int col = myIndex % gridSize;
 
+    // Posizionamento della Base Station
     x = (col + 0.5) * (width / gridSize);
     y = (row + 0.5) * (height / gridSize);
 
+    // Aggiorna la posizione nel display string
+    getDisplayString().setTagArg("p", 0, x);
+    getDisplayString().setTagArg("p", 1, y);
 
     EV << "BaseStation " << myIndex << " positioned at (" << x << ", " << y << ")\n";
-
-
-    for (int i = 0; i < numBaseStations; ++i) {
-        if (i != myIndex) {
-            cModule *otherBaseStation = parent->getSubmodule("baseStations", i);
-
-            cGate *outGate = gate("out", i);
-            cGate *inGate = otherBaseStation->gate("in", myIndex);
-
-            cDelayChannel *delayChannel = cDelayChannel::create("meshDelayChannel");
-            delayChannel->setDelay(delay / 1000.0);
-
-            outGate->connectTo(inGate, delayChannel);
-        }
-    }
 }
-
 
 void BaseStation::handleMessage(cMessage *msg) {
     if (msg->isSelfMessage()) {
-        delete msg;
+        // Messaggio interno di scheduling
+        cPacket *pkt = check_and_cast<cPacket *>(msg);
+        EV << "Processing self-message: " << pkt->getName() << "\n";
+        delete pkt;
+
         if (!taskQueue.empty()) {
             cMessage *nextTask = taskQueue.front();
             taskQueue.pop();
             scheduleAt(simTime() + 1 / serviceRate, nextTask);
         }
     } else {
-        if (taskQueue.size() > 10) {
-            cModule *parent = getParentModule();
-            int numBaseStations = parent->par("numBaseStations");
-
-            cModule *leastLoadedBS = nullptr;
-            int minQueueSize = INT_MAX;
-
-            for (int i = 0; i < numBaseStations; ++i) {
-                cModule *otherBaseStation = parent->getSubmodule("baseStations", i);
-                if (otherBaseStation != this) {
-                    BaseStation *bs = check_and_cast<BaseStation *>(otherBaseStation);
-                    if ((int)bs->taskQueue.size() < minQueueSize) {
-                        minQueueSize = bs->taskQueue.size();
-                        leastLoadedBS = bs;
-                    }
-                }
-            }
-
-            if (leastLoadedBS) {
-                int index = leastLoadedBS->getIndex();
-                send(msg, "out", index);
-            }
-        } else {
+        // Messaggio in arrivo dall'esterno (utente o altra basestation)
+        if ((int)taskQueue.size() < queueSize) {
+            // C'è spazio in coda, accodiamo
             taskQueue.push(msg);
             if (taskQueue.size() == 1) {
                 scheduleAt(simTime() + 1 / serviceRate, msg);
             }
+        } else {
+            // Coda piena, cerchiamo una BaseStation meno carica o vuota
+            cModule *bestBS = findBestBaseStation();
+            if (bestBS == nullptr) {
+                // Nessuna stazione disponibile, scartiamo il messaggio
+                EV << "No free queue found. Dropping message: " << msg->getName() << "\n";
+                delete msg;
+            } else {
+                EV << "Forwarding message: " << msg->getName() << " to " << bestBS->getFullName() << "\n";
+                sendDirect(msg, bestBS, "in");
+            }
         }
     }
+}
+
+cModule* BaseStation::findBestBaseStation() {
+    cModule *parent = getParentModule();
+
+    cModule* bestBS = nullptr;
+    int bestQueue = INT_MAX; 
+
+    for (int i = 0; i < numBaseStations; i++) {
+        if (i == getIndex()) continue; // Salta la stazione attuale
+        cModule *mod = parent->getSubmodule("baseStation", i);
+        BaseStation *bs = check_and_cast<BaseStation *>(mod);
+        int qlen = bs->getQueueLength();
+
+        // Prima priorità: se troviamo una base station con coda vuota, restituiamola subito
+        if (qlen == 0) {
+            return mod;
+        }
+
+        // Altrimenti teniamo traccia di quella con la coda meno piena
+        if (qlen < bs->queueSize && qlen < bestQueue) {
+            bestQueue = qlen;
+            bestBS = mod;
+        }
+    }
+
+    return bestBS; // se non ne troviamo nessuna vuota, restituiamo la meno piena, o nullptr se non c'è
 }
