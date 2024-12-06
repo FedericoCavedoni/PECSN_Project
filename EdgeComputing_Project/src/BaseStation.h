@@ -17,6 +17,7 @@ private:
     double x, y;
 
     int numBaseStations;
+    int processingTime;
 
 public:
     int getQueueLength() const { return (int)taskQueue.size(); }
@@ -24,6 +25,8 @@ public:
     double get_y() const { return y; }  
 
 protected:
+    ~BaseStation(); 
+
     virtual void initialize() override;
     virtual void handleMessage(cMessage *msg) override;
     cModule* findBestBaseStation();

@@ -1,101 +1,152 @@
 #include "User.h"
 #include "BaseStation.h"
+#include <cmath>
+#include <climits> // per INT_MAX
 
 Define_Module(User);
 
 void User::initialize() {
-    // Inizializzazione dei parametri
-    intervalRate = par("intervalRate");  // Tasso di intervallo per l'invio dei task
-    sizeRate = par("sizeRate");          // Tasso per la dimensione del task
+    intervalRate = par("intervalRate").doubleValue();  
+    sizeRate = par("sizeRate").doubleValue();          
 
-    // Verifica se usare una distribuzione uniforme o lognormale per la posizione
     if (par("uniformDistribution").boolValue()) {
         // Distribuzione uniforme
         cModule *parent = getParentModule();
-        int width = parent->par("width");  // Larghezza del campo
-        int height = parent->par("height");  // Altezza del campo
+        if (!parent) {
+            EV << "[ERROR] Parent module not found during initialization.\n";
+            endSimulation();
+            return;
+        }
 
-        // Posizione uniforme nelle coordinate x e y
+        if (!parent->hasPar("width") || !parent->hasPar("height")) {
+            EV << "[ERROR] Parent module missing 'width' or 'height' parameters.\n";
+            endSimulation();
+            return;
+        }
+
+        int width = parent->par("width").intValue();  
+        int height = parent->par("height").intValue();  
+
         x = uniform(0, width, 0);
         y = uniform(0, height, 1);
 
-    } else {
+        EV << "[DEBUG] User " << getIndex() << " positioned uniformly at (" << x << ", " << y << ")\n";
+    }
+    else {
         // Distribuzione lognormale
-        int mean = par("mean");          // Media della distribuzione lognormale
-        int std_dev = par("std_dev");    // Deviazione standard
+        double mean = par("mean").doubleValue();        
+        double std_dev = par("std_dev").doubleValue();    
 
-        // Posizione lognormale nelle coordinate x e y
+        if (mean <= 0 || std_dev <= 0) {
+            EV << "[ERROR] Invalid 'mean' or 'std_dev' for lognormal distribution.\n";
+            endSimulation();
+            return;
+        }
+
         x = lognormal(mean, std_dev, 0);
         y = lognormal(mean, std_dev, 1);
+
+        EV << "[DEBUG] User " << getIndex() << " positioned lognormally at (" << x << ", " << y << ")\n";
     }
 
-    // Aggiorna la posizione del modulo nel display string
+    // Aggiorna la posizione nel display string
     getDisplayString().setTagArg("p", 0, x);
     getDisplayString().setTagArg("p", 1, y);
 
-    // Invia il primo task dopo un intervallo esponenziale
     cMessage *sendEvent = new cMessage("sendEvent");
-    double taskInterval = exponential(intervalRate);  // Calcola l'intervallo per il prossimo task
-    scheduleAt(simTime() + taskInterval, sendEvent);  // Pianifica l'invio del task
-
+    double taskInterval = exponential(intervalRate);  
+    scheduleAt(simTime() + taskInterval, sendEvent);  
 }
 
 void User::handleMessage(cMessage *msg) {
-    // Verifica se il messaggio ricevuto è "sendEvent"
     if (strcmp(msg->getName(), "sendEvent") == 0) {
         // Messaggio di invio di un task
         cPacket *task = new cPacket("Task");
 
-        // Calcola la dimensione del task usando una distribuzione esponenziale
         double taskSize = exponential(sizeRate);
-        task->setByteLength(taskSize);  // Imposta la dimensione del task in byte
+        if (taskSize <= 0) {
+            EV << "[WARNING] Generated taskSize <= 0 (" << taskSize << "). Setting to default (1 byte).\n";
+            taskSize = 1.0;
+        }
+        task->setByteLength(static_cast<int>(taskSize));  
 
-        // Trova la base station più vicina
+        // Trova la BaseStation più vicina
         cModule *nearestBaseStation = findNearestBaseStation();
+        if (!nearestBaseStation) {
+            EV << "[ERROR] No nearest BaseStation found. Dropping task: " << task->getName() << "\n";
+            delete task;
+        }
+        else {
+            EV << "[DEBUG] Sending task: " << task->getName() << " to BaseStation: " << nearestBaseStation->getFullName() << "\n";
+            sendDirect(task, nearestBaseStation, "in");
+        }
 
-        // Invia il task alla base station più vicina tramite il gate "in"
-        sendDirect(task, nearestBaseStation, "in");
-
-        // Pianifica il prossimo invio del task dopo un intervallo esponenziale
+        // Pianifica il prossimo sendEvent
         double taskInterval = exponential(intervalRate);
-        cMessage *sendEvent = new cMessage("sendEvent");
-        scheduleAt(simTime() + taskInterval, sendEvent);  // Pianifica il prossimo "sendEvent"
+        if (taskInterval <= 0) {
+            EV << "[WARNING] Generated taskInterval <= 0 (" << taskInterval << "). Setting to default (1 second).\n";
+            taskInterval = 1.0;
+        }
 
-        // Elimina il messaggio originale
+        cMessage *sendEventNew = new cMessage("sendEvent");
+        scheduleAt(simTime() + taskInterval, sendEventNew);  
+        
         delete msg;
-    } else {
-        // Se il messaggio ricevuto non è "sendEvent", logga l'errore
-        EV << "Received unknown message: " << msg->getName() << "\n";
-        delete msg;  // Elimina il messaggio non riconosciuto
+    }
+    else {
+        // Messaggio sconosciuto
+        EV << "[ERROR] Received unknown message: " << msg->getName() << "\n";
+        delete msg;  
     }
 }
 
-cModule *User::findNearestBaseStation() {
-    // Trova la base station più vicina all'utente
+cModule* User::findNearestBaseStation() {
+    // Trova la BaseStation più vicina all'utente
     cModule *parent = getParentModule();
-    int numBaseStations = parent->par("numBaseStations");  // Numero totale di base station
+    if (!parent) {
+        EV << "[ERROR] Parent module not found while searching for the nearest BaseStation.\n";
+        return nullptr;
+    }
+
+    int numBaseStations = parent->par("numBaseStations").intValue();  
+    if (numBaseStations <= 0) {
+        EV << "[ERROR] Invalid number of BaseStations: " << numBaseStations << "\n";
+        return nullptr;
+    }
+
     cModule *nearest = nullptr;
-    double minDistance = INFINITY;  // Inizializza la distanza minima come infinita
+    double minDistance = INFINITY;  
 
-    // Cicla attraverso tutte le base station per calcolare la distanza
     for (int i = 0; i < numBaseStations; ++i) {
-        // Ottieni il modulo della base station
-        cModule *baseStation = parent->getSubmodule("baseStations", i);
-        BaseStation *bs = check_and_cast<BaseStation *>(baseStation);  // Cast a tipo BaseStation
+        cModule *baseStation = parent->getSubmodule("baseStations", i); 
 
-        // Ottieni le coordinate della base station
+        if (!baseStation) {
+            EV << "[WARNING] BaseStation module 'baseStations[" << i << "]' not found.\n";
+            continue;
+        }
+
+        BaseStation *bs = dynamic_cast<BaseStation*>(baseStation);
+        if (!bs) {
+            EV << "[ERROR] Failed to cast BaseStation module " << i << " to BaseStation.\n";
+            continue;
+        }
+
         double baseX = bs->get_x();
         double baseY = bs->get_y();
 
-        // Calcola la distanza tra l'utente e la base station
+        // Controlla se le coordinate sono valide
+        if (baseX < 0 || baseY < 0) {
+            EV << "[WARNING] BaseStation " << i << " has invalid coordinates (" << baseX << ", " << baseY << "). Skipping.\n";
+            continue;
+        }
+
         double distance = std::sqrt(std::pow(baseX - x, 2) + std::pow(baseY - y, 2));
 
-        // Se la distanza è inferiore alla distanza minima trovata, aggiorna la base station più vicina
         if (distance < minDistance) {
             minDistance = distance;
-            nearest = baseStation;  // Aggiorna la base station più vicina
+            nearest = baseStation; 
         }
     }
 
-    return nearest;  // Ritorna la base station più vicina
+    return nearest;  
 }

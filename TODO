@@ -10,4 +10,5 @@
     -Size della queue messa a caso
     -Posizionamento basestations
     -Rate, L, H e parametri vari messi a caso
+    -Posizionamento user che non varia, probabilmente deve variare il seed
     

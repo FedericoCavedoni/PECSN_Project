@@ -14,6 +14,8 @@ class User : public cSimpleModule {
     double sizeRate;
 
   protected:
+    ~User() {};
+
     virtual void initialize() override;
     virtual void handleMessage(cMessage *msg) override;
     cModule *findNearestBaseStation();
