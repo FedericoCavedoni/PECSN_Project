@@ -12,7 +12,7 @@ private:
     double delay;
 
     int queueSize;
-    std::queue<cMessage*> taskQueue;
+    std::queue<cPacket*> taskQueue;
 
     double x, y;
 
@@ -20,6 +20,8 @@ private:
 
 public:
     int getQueueLength() const { return (int)taskQueue.size(); }
+    double get_x() const { return x; }
+    double get_y() const { return y; }  
 
 protected:
     virtual void initialize() override;

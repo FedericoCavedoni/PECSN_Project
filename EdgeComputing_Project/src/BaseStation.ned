@@ -5,10 +5,7 @@ simple BaseStation {
         double delay;
         double serviceRate;
 
-        int queueSize;
-
-        int numBaseStations;
-        
+        int queueSize;   
     gates:
         input in @directIn;
 }

@@ -10,15 +10,8 @@ class User : public cSimpleModule {
     double x;
     double y;
 
-    double taskInterval;
-    double taskSize;
-
     double intervalRate;
     double sizeRate;
-
-    cMessage *sendEvent;
-    cModule *nearestBaseStation;
-    cGate *destGate;
 
   protected:
     virtual void initialize() override;
