@@ -54,7 +54,7 @@ void User::initialize() {
     getDisplayString().setTagArg("p", 1, y);
 
     cMessage *sendEvent = new cMessage("sendEvent");
-    double taskInterval = exponential(intervalRate);  
+    double taskInterval = exponential(intervalRate, 2);  
     scheduleAt(simTime() + taskInterval, sendEvent);  
 }
 
@@ -63,7 +63,7 @@ void User::handleMessage(cMessage *msg) {
         // Messaggio di invio di un task
         cPacket *task = new cPacket("Task");
 
-        double taskSize = exponential(sizeRate);
+        double taskSize = exponential(sizeRate, 3);
         if (taskSize <= 0) {
             EV << "[WARNING] Generated taskSize <= 0 (" << taskSize << "). Setting to default (1 byte).\n";
             taskSize = 1.0;
@@ -82,7 +82,7 @@ void User::handleMessage(cMessage *msg) {
         }
 
         // Pianifica il prossimo sendEvent
-        double taskInterval = exponential(intervalRate);
+        double taskInterval = exponential(intervalRate, 2);
         if (taskInterval <= 0) {
             EV << "[WARNING] Generated taskInterval <= 0 (" << taskInterval << "). Setting to default (1 second).\n";
             taskInterval = 1.0;

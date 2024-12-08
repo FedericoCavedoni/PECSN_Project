@@ -5,10 +5,15 @@
 
 
 .DA RIVEDERE:
-    -Rate di I, T
+    -Rate di I Interrival rate, T size lenght
     -Mean e std dev del lognormal da vedere
     -Size della queue messa a caso
     -Posizionamento basestations
-    -Rate, L, H e parametri vari messi a caso
+    -Rate, L e H Dimensioni della grid e parametri vari messi a caso
     -Posizionamento user che non varia, probabilmente deve variare il seed
+    -eccezioni 
+
+
+.SIMULATION WORKFLOW
+-slide 102-114
     
