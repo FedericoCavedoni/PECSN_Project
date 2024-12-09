@@ -69,7 +69,6 @@ void BaseStation::initialize() {
 }
 
 void BaseStation::handleMessage(cMessage *msg) {
-    EV << "[DEBUG] Received message: " << msg->getName() << " of type: " << msg->getClassName() << " at time: " << simTime() << "\n";
 
     if (msg->isSelfMessage()) {
         if (strcmp(msg->getName(), "processNextTask") == 0) {
@@ -100,20 +99,20 @@ void BaseStation::handleMessage(cMessage *msg) {
                     processingTime = length / serviceRate;
                 }
 
-                scheduleAt(simTime() + processingTime, nextPkt); 
+                cMessage *processMsg = new cMessage("processNextTask");
+                scheduleAt(simTime() + processingTime, processMsg); 
             }
             else {
                 EV << "[DEBUG] Queue is empty. No tasks to process.\n";
             }
 
             delete msg;
-        }
-        else {
+        }else {
             EV << "[WARNING] Received unexpected self-message: " << msg->getName() << "\n";
             delete msg;
         }
-    }
-    else {
+
+    }else {
         // Messaggio in arrivo da fuori la baseStation
         if (strcmp(msg->getName(), "Task") != 0) {
             EV << "[ERROR] Unexpected message name: " << msg->getName() << ". Discarding.\n";
@@ -136,6 +135,10 @@ void BaseStation::handleMessage(cMessage *msg) {
             delete msg;
             return;
         }
+
+        EV << "[DEBUG] Received task. ";
+        EV << "Packet name: " << pkt->getName();
+        EV << ", Packet length: " << pkt->getByteLength() << "\n";
 
         if (static_cast<int>(taskQueue.size()) < queueSize) {
             if (taskQueue.size() == 0) {

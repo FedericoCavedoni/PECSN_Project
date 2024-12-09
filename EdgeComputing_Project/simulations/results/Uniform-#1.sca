@@ -1,8 +1,8 @@
 version 3
-run Uniform-0-20241209-13:08:06-21284
+run Uniform-1-20241209-12:36:06-26152
 attr configname Uniform
-attr datetime 20241209-13:08:06
-attr datetimef 20241209-130806
+attr datetime 20241209-12:36:06
+attr datetimef 20241209-123606
 attr experiment Uniform
 attr inifile omnetpp.ini
 attr iterationvars ""
@@ -10,18 +10,18 @@ attr iterationvarsd ""
 attr iterationvarsf ""
 attr measurement ""
 attr network EdgeComputingNetwork
-attr processid 21284
-attr repetition 0
-attr replication #0
+attr processid 26152
+attr repetition 1
+attr replication #1
 attr resultdir results
-attr runnumber 0
-attr seedset 0
+attr runnumber 1
+attr seedset 1
 config description "Unifrom distribution of users"
 config **.users[*].uniformDistribution true
 config network EdgeComputingNetwork
 config sim-time-limit 100s
 config num-rngs 4
-config seed-set 0
+config seed-set 1
 config repeat 10
 config **.width 100
 config **.height 100
