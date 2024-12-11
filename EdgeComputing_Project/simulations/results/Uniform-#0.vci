@@ -1,0 +1,45 @@
+file 2001 1733956619                                            
+version 3
+run Uniform-0-20241211-23:36:52-27048
+attr configname Uniform
+attr datetime 20241211-23:36:52
+attr datetimef 20241211-233652
+attr experiment Uniform
+attr inifile omnetpp.ini
+attr iterationvars ""
+attr iterationvarsd ""
+attr iterationvarsf ""
+attr measurement ""
+attr network EdgeComputingNetwork
+attr processid 27048
+attr repetition 0
+attr replication #0
+attr resultdir results
+attr runnumber 0
+attr seedset 0
+config description "Unifrom distribution of users"
+config **.users[*].uniformDistribution true
+config network EdgeComputingNetwork
+config sim-time-limit 100s
+config num-rngs 4
+config seed-set 0
+config repeat 10
+config **.width 100
+config **.height 100
+config **.numBaseStations 2
+config **.numUsers 3
+config **.baseStations[*].serviceRate 1
+config **.baseStations[*].delay 0.100
+config **.baseStations[*].queueSize 10
+config **.users[*].intervalRate 10
+config **.users[*].sizeRate 10
+
+vector 0 EdgeComputingNetwork.baseStations[1] responseTime:vector ETV
+attr recordingmode vector
+attr source responseTimeSignal
+vector 1 EdgeComputingNetwork.baseStations[0] responseTime:vector ETV
+attr recordingmode vector
+attr source responseTimeSignal
+0	1200 404 7 101 8.262682368466 93.262682368466 11 15.216003525702 82.642896793318 426.42184586868 20793.820199457
+1	1604 395 36 107 42.079952826353 98.518593807925 12 3.060797303551 22.65718013751 111.65330155105 1516.4248621337
+

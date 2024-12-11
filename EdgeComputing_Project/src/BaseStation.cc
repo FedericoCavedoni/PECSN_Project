@@ -1,13 +1,14 @@
+// BaseStation.cc
 #include "BaseStation.h"
 #include <cmath>
-#include <climits> 
+#include <climits>
 
 Define_Module(BaseStation);
 
 BaseStation::~BaseStation() {
     // Dealloca tutti i pacchetti rimasti nella coda
     while (taskQueue.size() > 0) {
-        cPacket *pkt = taskQueue.front();
+        QueuePacket *pkt = taskQueue.front();
         taskQueue.pop();
         delete pkt;
     }
@@ -17,6 +18,8 @@ void BaseStation::initialize() {
     serviceRate = par("serviceRate").doubleValue();
     delay = par("delay").doubleValue();
     queueSize = par("queueSize").intValue();
+
+    responseTimeSignal_ = registerSignal("responseTimeSignal");
 
     cModule *parent = getParentModule();
     if (!parent) {
@@ -69,13 +72,11 @@ void BaseStation::initialize() {
 }
 
 void BaseStation::handleMessage(cMessage *msg) {
-
     if (msg->isSelfMessage()) {
         if (strcmp(msg->getName(), "processNextTask") == 0) {
-
             // Processa il prossimo task nella coda
             if (taskQueue.size() > 0) {
-                cPacket *nextPkt = taskQueue.front();
+                QueuePacket *nextPkt = taskQueue.front();
                 taskQueue.pop();
                 EV << "[DEBUG] Task dequeued. Queue size: " << taskQueue.size() << "\n";
 
@@ -91,6 +92,81 @@ void BaseStation::handleMessage(cMessage *msg) {
                     length = 1.0;
                 }
 
+                simtime_t processingTime;
+                if (serviceRate <= 0) {
+                    EV << "[ERROR] Invalid serviceRate: " << serviceRate << ". Cannot compute processingTime. Setting to default (1 unit).\n";
+                    processingTime = 1.0;
+                }
+                else {
+                    processingTime = length / serviceRate;
+                }
+
+                // Calcolo del response time usando arrivalTime
+                simtime_t responseTime = simTime() - nextPkt->getArrivalTime() + processingTime;
+                emit(responseTimeSignal_, responseTime);
+
+                // Elimina il pacchetto dopo l'elaborazione
+                delete nextPkt;
+
+                // Programma il prossimo task se la coda non è vuota
+                if (taskQueue.size() > 0) { 
+                    cMessage *processMsg = new cMessage("processNextTask");
+                    scheduleAt(simTime() + processingTime, processMsg); 
+                }
+
+                delete msg; // Elimina il selfMessage
+            }
+            else {
+                EV << "[DEBUG] Queue is empty. No tasks to process.\n";
+                delete msg;
+            }
+        }
+        else {
+            EV << "[WARNING] Received unexpected self-message: " << msg->getName() << "\n";
+            delete msg;
+        }
+    }
+    else {
+        // Messaggio in arrivo da fuori la baseStation
+        if (strcmp(msg->getName(), "Task") != 0) {
+            EV << "[ERROR] Unexpected message name: " << msg->getName() << ". Discarding.\n";
+            delete msg;
+            return;
+        }
+
+        // Cast a cPacket
+        cPacket *incomingPkt = dynamic_cast<cPacket *>(msg);
+        if (!incomingPkt) {
+            EV << "[ERROR] Incoming message is not a cPacket. Discarding.\n";
+            delete msg;
+            return;
+        }
+
+        EV << "[DEBUG] Received task. ";
+        EV << "Packet name: " << incomingPkt->getName();
+        EV << ", Packet length: " << incomingPkt->getByteLength() << "\n";
+
+        // Converti cPacket in QueuePacket
+        QueuePacket *queuePkt = new QueuePacket(incomingPkt->getName());
+        queuePkt->setByteLength(incomingPkt->getByteLength());
+        queuePkt->setArrivalTime(simTime().dbl());
+
+        // Elimina il cPacket originale se non necessario
+        delete incomingPkt;
+
+        if (taskQueue.size() < queueSize) {
+            if (taskQueue.size() == 0) {
+                // Coda vuota: programma il task immediatamente
+                EV << "[DEBUG] Queue is empty, scheduling task immediately.\n";
+                taskQueue.push(queuePkt);
+
+                double length = queuePkt->getByteLength();
+                if (length <= 0) {
+                    EV << "[WARNING] Invalid packet length: " << length << ". Setting to default (1 byte).\n";
+                    length = 1.0;
+                }
+
+                simtime_t processingTime;
                 if (serviceRate <= 0) {
                     EV << "[ERROR] Invalid serviceRate: " << serviceRate << ". Cannot compute processingTime. Setting to default (1 unit).\n";
                     processingTime = 1.0;
@@ -103,69 +179,8 @@ void BaseStation::handleMessage(cMessage *msg) {
                 scheduleAt(simTime() + processingTime, processMsg); 
             }
             else {
-                EV << "[DEBUG] Queue is empty. No tasks to process.\n";
-            }
-
-            delete msg;
-        }else {
-            EV << "[WARNING] Received unexpected self-message: " << msg->getName() << "\n";
-            delete msg;
-        }
-
-    }else {
-        // Messaggio in arrivo da fuori la baseStation
-        if (strcmp(msg->getName(), "Task") != 0) {
-            EV << "[ERROR] Unexpected message name: " << msg->getName() << ". Discarding.\n";
-            delete msg;
-            return;
-        }
-
-        cPacket *pkt = nullptr;
-        try {
-            pkt = check_and_cast<cPacket *>(msg);
-        }
-        catch (std::bad_cast& e) {
-            EV << "[ERROR] Failed to cast incoming message to cPacket: " << e.what() << ". Discarding message.\n";
-            delete msg;
-            return;
-        }
-
-        if (!pkt) {
-            EV << "[ERROR] Incoming packet is nullptr after casting. Discarding message.\n";
-            delete msg;
-            return;
-        }
-
-        EV << "[DEBUG] Received task. ";
-        EV << "Packet name: " << pkt->getName();
-        EV << ", Packet length: " << pkt->getByteLength() << "\n";
-
-        if (static_cast<int>(taskQueue.size()) < queueSize) {
-            if (taskQueue.size() == 0) {
-                // Coda vuota: programma il task immediatamente
-                EV << "[DEBUG] Queue is empty, scheduling task immediately.\n";
-                taskQueue.push(pkt);
-
-                double length = pkt->getByteLength();
-                if (length <= 0) {
-                    EV << "[WARNING] Invalid packet length: " << length << ". Setting to default (1 byte).\n";
-                    length = 1.0;
-                }
-
-                if (serviceRate <= 0) {
-                    EV << "[ERROR] Invalid serviceRate: " << serviceRate << ". Cannot compute processingTime. Setting to default (1 unit).\n";
-                    processingTime = 1.0;
-                }
-                else {
-                    processingTime = length / serviceRate;
-                }
-
-                cMessage *processMsg = new cMessage("processNextTask");
-                scheduleAt(simTime() + processingTime, processMsg);
-            }
-            else {
                 // Coda non vuota: aggiungi il task in coda
-                taskQueue.push(pkt);
+                taskQueue.push(queuePkt);
                 EV << "[DEBUG] Task enqueued. New queue size: " << taskQueue.size() << "\n";
             }
         }
@@ -174,12 +189,12 @@ void BaseStation::handleMessage(cMessage *msg) {
             EV << "[DEBUG] Queue full. Searching for the best BaseStation to forward the task.\n";
             cModule *bestBS = findBestBaseStation();
             if (bestBS == nullptr) {
-                EV << "[ERROR] No free queue found. Dropping task: " << pkt->getName() << "\n";
-                delete pkt;
+                EV << "[ERROR] No free queue found. Dropping task: " << queuePkt->getName() << "\n";
+                delete queuePkt;
             }
             else {
-                EV << "[DEBUG] Forwarding task: " << pkt->getName() << " to BaseStation: " << bestBS->getFullName() << "\n";
-                sendDirect(pkt, bestBS, "in");
+                EV << "[DEBUG] Forwarding task: " << queuePkt->getName() << " to BaseStation: " << bestBS->getFullName() << "\n";
+                sendDirect(queuePkt, bestBS, "in");
             }
         }
     }

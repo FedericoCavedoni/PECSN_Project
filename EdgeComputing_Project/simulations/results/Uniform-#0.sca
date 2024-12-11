@@ -1,8 +1,8 @@
 version 3
-run Uniform-0-20241209-13:08:06-21284
+run Uniform-0-20241211-23:36:52-27048
 attr configname Uniform
-attr datetime 20241209-13:08:06
-attr datetimef 20241209-130806
+attr datetime 20241211-23:36:52
+attr datetimef 20241211-233652
 attr experiment Uniform
 attr inifile omnetpp.ini
 attr iterationvars ""
@@ -10,7 +10,7 @@ attr iterationvarsd ""
 attr iterationvarsf ""
 attr measurement ""
 attr network EdgeComputingNetwork
-attr processid 21284
+attr processid 27048
 attr repetition 0
 attr replication #0
 attr resultdir results
@@ -30,28 +30,34 @@ config **.numUsers 3
 config **.baseStations[*].serviceRate 1
 config **.baseStations[*].delay 0.100
 config **.baseStations[*].queueSize 10
-config **.users[*].intervalRate 1
-config **.users[*].sizeRate 1
+config **.users[*].intervalRate 10
+config **.users[*].sizeRate 10
 
 par EdgeComputingNetwork.baseStations[0] typename "\"edgecomputing_project.BaseStation\""
 par EdgeComputingNetwork.baseStations[0] delay 0.1
 par EdgeComputingNetwork.baseStations[0] serviceRate 1
 par EdgeComputingNetwork.baseStations[0] queueSize 10
+scalar EdgeComputingNetwork.baseStations[0] responseTime:mean 9.3044417959207
+attr recordingmode mean
+attr source responseTimeSignal
 par EdgeComputingNetwork.baseStations[1] typename "\"edgecomputing_project.BaseStation\""
 par EdgeComputingNetwork.baseStations[1] delay 0.1
 par EdgeComputingNetwork.baseStations[1] serviceRate 1
 par EdgeComputingNetwork.baseStations[1] queueSize 10
+scalar EdgeComputingNetwork.baseStations[1] responseTime:mean 38.765622351698
+attr recordingmode mean
+attr source responseTimeSignal
 par EdgeComputingNetwork.users[0] typename "\"edgecomputing_project.User\""
-par EdgeComputingNetwork.users[0] intervalRate 1
-par EdgeComputingNetwork.users[0] sizeRate 1
+par EdgeComputingNetwork.users[0] intervalRate 10
+par EdgeComputingNetwork.users[0] sizeRate 10
 par EdgeComputingNetwork.users[0] uniformDistribution true
 par EdgeComputingNetwork.users[1] typename "\"edgecomputing_project.User\""
-par EdgeComputingNetwork.users[1] intervalRate 1
-par EdgeComputingNetwork.users[1] sizeRate 1
+par EdgeComputingNetwork.users[1] intervalRate 10
+par EdgeComputingNetwork.users[1] sizeRate 10
 par EdgeComputingNetwork.users[1] uniformDistribution true
 par EdgeComputingNetwork.users[2] typename "\"edgecomputing_project.User\""
-par EdgeComputingNetwork.users[2] intervalRate 1
-par EdgeComputingNetwork.users[2] sizeRate 1
+par EdgeComputingNetwork.users[2] intervalRate 10
+par EdgeComputingNetwork.users[2] sizeRate 10
 par EdgeComputingNetwork.users[2] uniformDistribution true
 par EdgeComputingNetwork typename "\"edgecomputing_project.simulations.EdgeComputingNetwork\""
 par EdgeComputingNetwork numBaseStations 2

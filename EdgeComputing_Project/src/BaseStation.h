@@ -4,6 +4,8 @@
 #include <omnetpp.h>
 #include <queue>
 
+#include "QueuePacket_m.h"
+
 using namespace omnetpp;
 
 class BaseStation : public cSimpleModule {
@@ -12,12 +14,13 @@ private:
     double delay;
 
     int queueSize;
-    std::queue<cPacket*> taskQueue;
+    std::queue<QueuePacket*> taskQueue;
 
     double x, y;
 
     int numBaseStations;
-    int processingTime;
+
+    simsignal_t responseTimeSignal_;
 
 public:
     int getQueueLength() const { return (int)taskQueue.size(); }
