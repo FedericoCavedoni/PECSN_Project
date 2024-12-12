@@ -20,6 +20,9 @@ void BaseStation::initialize() {
     queueSize = par("queueSize").intValue();
 
     responseTimeSignal_ = registerSignal("responseTimeSignal");
+    queueLengthSignal_ = registerSignal("queueLengthSignal");
+    forwardedSignal_ = registerSignal("forwardedSignal");
+    droppedSignal_ = registerSignal("droppedSignal");
 
     cModule *parent = getParentModule();
     if (!parent) {
@@ -69,6 +72,8 @@ void BaseStation::initialize() {
     getDisplayString().setTagArg("p", 1, y);
 
     EV << "[DEBUG] BaseStation " << myIndex << " positioned at (" << x << ", " << y << ")\n";
+
+    emit(queueLengthSignal_, (double)taskQueue.size());
 }
 
 void BaseStation::handleMessage(cMessage *msg) {
@@ -78,6 +83,7 @@ void BaseStation::handleMessage(cMessage *msg) {
             if (taskQueue.size() > 0) {
                 QueuePacket *nextPkt = taskQueue.front();
                 taskQueue.pop();
+                emit(queueLengthSignal_, (double)taskQueue.size());
                 EV << "[DEBUG] Task dequeued. Queue size: " << taskQueue.size() << "\n";
 
                 if (!nextPkt) {
@@ -159,6 +165,7 @@ void BaseStation::handleMessage(cMessage *msg) {
                 // Coda vuota: programma il task immediatamente
                 EV << "[DEBUG] Queue is empty, scheduling task immediately.\n";
                 taskQueue.push(queuePkt);
+                emit(queueLengthSignal_, (double)taskQueue.size());
 
                 double length = queuePkt->getByteLength();
                 if (length <= 0) {
@@ -181,6 +188,7 @@ void BaseStation::handleMessage(cMessage *msg) {
             else {
                 // Coda non vuota: aggiungi il task in coda
                 taskQueue.push(queuePkt);
+                emit(queueLengthSignal_, (double)taskQueue.size());
                 EV << "[DEBUG] Task enqueued. New queue size: " << taskQueue.size() << "\n";
             }
         }
@@ -190,10 +198,12 @@ void BaseStation::handleMessage(cMessage *msg) {
             cModule *bestBS = findBestBaseStation();
             if (bestBS == nullptr) {
                 EV << "[ERROR] No free queue found. Dropping task: " << queuePkt->getName() << "\n";
+                emit(droppedSignal_, 1);
                 delete queuePkt;
             }
             else {
                 EV << "[DEBUG] Forwarding task: " << queuePkt->getName() << " to BaseStation: " << bestBS->getFullName() << "\n";
+                emit(forwardedSignal_, 1);
                 sendDirect(queuePkt, bestBS, "in");
             }
         }

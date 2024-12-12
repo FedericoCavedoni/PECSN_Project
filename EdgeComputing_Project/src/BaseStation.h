@@ -21,6 +21,9 @@ private:
     int numBaseStations;
 
     simsignal_t responseTimeSignal_;
+    simsignal_t queueLengthSignal_;
+    simsignal_t forwardedSignal_;
+    simsignal_t droppedSignal_;
 
 public:
     int getQueueLength() const { return (int)taskQueue.size(); }
