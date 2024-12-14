@@ -204,7 +204,7 @@ void BaseStation::handleMessage(cMessage *msg) {
             else {
                 EV << "[DEBUG] Forwarding task: " << queuePkt->getName() << " to BaseStation: " << bestBS->getFullName() << "\n";
                 emit(forwardedSignal_, 1);
-                sendDirect(queuePkt, bestBS, "in");
+                sendDirect(queuePkt, delay, 0, bestBS, "in");
             }
         }
     }
