@@ -5,6 +5,8 @@ simple BaseStation {
         double delay;
         double serviceRate;
 
+        bool locallyManaged;
+
         int queueSize;   
 
         @signal[responseTimeSignal];

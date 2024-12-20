@@ -1,9 +1,8 @@
-file 1378 1734723603                                            
 version 3
-run Uniform-0-20241220-20:40:00-2408
+run Uniform-1-20241220-16:38:59-10144
 attr configname Uniform
-attr datetime 20241220-20:40:00
-attr datetimef 20241220-204000
+attr datetime 20241220-16:38:59
+attr datetimef 20241220-163859
 attr experiment Uniform
 attr inifile omnetpp.ini
 attr iterationvars ""
@@ -11,12 +10,12 @@ attr iterationvarsd ""
 attr iterationvarsf ""
 attr measurement ""
 attr network EdgeComputingNetwork
-attr processid 2408
-attr repetition 0
-attr replication #0
+attr processid 10144
+attr repetition 1
+attr replication #1
 attr resultdir results
-attr runnumber 0
-attr seedset 0
+attr runnumber 1
+attr seedset 1
 config description "Unifrom distribution of users"
 config **.users[*].uniformDistribution true
 config network EdgeComputingNetwork
@@ -26,7 +25,7 @@ config **.users[*].rng-0 0
 config **.users[*].rng-1 1
 config **.users[*].rng-2 2
 config **.users[*].rng-3 3
-config seed-set 0
+config seed-set 1
 config repeat 10
 config **.width 100
 config **.height 100
@@ -35,7 +34,6 @@ config **.numUsers 3
 config **.baseStations[*].serviceRate 1
 config **.baseStations[*].delay 0.100
 config **.baseStations[*].queueSize 10
-config **.baseStations[*].locallyManaged false
 config **.users[*].intervalRate 1/10
 config **.users[*].sizeRate 1/10
 
@@ -45,6 +43,6 @@ attr source queueLengthSignal
 vector 1 EdgeComputingNetwork.baseStations[1] queueLength:vector ETV
 attr recordingmode vector
 attr source queueLengthSignal
-0	1358 9 0 0 0 0 1 0 0 0 0
-1	1367 9 0 0 0 0 1 0 0 0 0
+0	0	0	0
+1	0	0	0
 

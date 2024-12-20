@@ -22,14 +22,14 @@ class QueuePacket;
  * <pre>
  * packet QueuePacket extends cPacket
  * {
- *     double arrivalTime; // Tempo di arrivo nel sistema
+ *     double creationTime; // Tempo di arrivo nel sistema
  * }
  * </pre>
  */
 class QueuePacket : public ::omnetpp::cPacket
 {
   protected:
-    double arrivalTime = 0;
+    double creationTime = 0;
 
   private:
     void copy(const QueuePacket& other);
@@ -46,8 +46,8 @@ class QueuePacket : public ::omnetpp::cPacket
     virtual void parsimPack(omnetpp::cCommBuffer *b) const override;
     virtual void parsimUnpack(omnetpp::cCommBuffer *b) override;
 
-    virtual double getArrivalTime() const;
-    virtual void setArrivalTime(double arrivalTime);
+    virtual double getCreationTime() const;
+    virtual void setCreationTime(double creationTime);
 };
 
 inline void doParsimPacking(omnetpp::cCommBuffer *b, const QueuePacket& obj) {obj.parsimPack(b);}

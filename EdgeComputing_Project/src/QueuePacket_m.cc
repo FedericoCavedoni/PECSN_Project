@@ -175,29 +175,29 @@ QueuePacket& QueuePacket::operator=(const QueuePacket& other)
 
 void QueuePacket::copy(const QueuePacket& other)
 {
-    this->arrivalTime = other.arrivalTime;
+    this->creationTime = other.creationTime;
 }
 
 void QueuePacket::parsimPack(omnetpp::cCommBuffer *b) const
 {
     ::omnetpp::cPacket::parsimPack(b);
-    doParsimPacking(b,this->arrivalTime);
+    doParsimPacking(b,this->creationTime);
 }
 
 void QueuePacket::parsimUnpack(omnetpp::cCommBuffer *b)
 {
     ::omnetpp::cPacket::parsimUnpack(b);
-    doParsimUnpacking(b,this->arrivalTime);
+    doParsimUnpacking(b,this->creationTime);
 }
 
-double QueuePacket::getArrivalTime() const
+double QueuePacket::getCreationTime() const
 {
-    return this->arrivalTime;
+    return this->creationTime;
 }
 
-void QueuePacket::setArrivalTime(double arrivalTime)
+void QueuePacket::setCreationTime(double creationTime)
 {
-    this->arrivalTime = arrivalTime;
+    this->creationTime = creationTime;
 }
 
 class QueuePacketDescriptor : public omnetpp::cClassDescriptor
@@ -205,7 +205,7 @@ class QueuePacketDescriptor : public omnetpp::cClassDescriptor
   private:
     mutable const char **propertyNames;
     enum FieldConstants {
-        FIELD_arrivalTime,
+        FIELD_creationTime,
     };
   public:
     QueuePacketDescriptor();
@@ -284,7 +284,7 @@ unsigned int QueuePacketDescriptor::getFieldTypeFlags(int field) const
         field -= base->getFieldCount();
     }
     static unsigned int fieldTypeFlags[] = {
-        FD_ISEDITABLE,    // FIELD_arrivalTime
+        FD_ISEDITABLE,    // FIELD_creationTime
     };
     return (field >= 0 && field < 1) ? fieldTypeFlags[field] : 0;
 }
@@ -298,7 +298,7 @@ const char *QueuePacketDescriptor::getFieldName(int field) const
         field -= base->getFieldCount();
     }
     static const char *fieldNames[] = {
-        "arrivalTime",
+        "creationTime",
     };
     return (field >= 0 && field < 1) ? fieldNames[field] : nullptr;
 }
@@ -307,7 +307,7 @@ int QueuePacketDescriptor::findField(const char *fieldName) const
 {
     omnetpp::cClassDescriptor *base = getBaseClassDescriptor();
     int baseIndex = base ? base->getFieldCount() : 0;
-    if (strcmp(fieldName, "arrivalTime") == 0) return baseIndex + 0;
+    if (strcmp(fieldName, "creationTime") == 0) return baseIndex + 0;
     return base ? base->findField(fieldName) : -1;
 }
 
@@ -320,7 +320,7 @@ const char *QueuePacketDescriptor::getFieldTypeString(int field) const
         field -= base->getFieldCount();
     }
     static const char *fieldTypeStrings[] = {
-        "double",    // FIELD_arrivalTime
+        "double",    // FIELD_creationTime
     };
     return (field >= 0 && field < 1) ? fieldTypeStrings[field] : nullptr;
 }
@@ -405,7 +405,7 @@ std::string QueuePacketDescriptor::getFieldValueAsString(omnetpp::any_ptr object
     }
     QueuePacket *pp = omnetpp::fromAnyPtr<QueuePacket>(object); (void)pp;
     switch (field) {
-        case FIELD_arrivalTime: return double2string(pp->getArrivalTime());
+        case FIELD_creationTime: return double2string(pp->getCreationTime());
         default: return "";
     }
 }
@@ -422,7 +422,7 @@ void QueuePacketDescriptor::setFieldValueAsString(omnetpp::any_ptr object, int f
     }
     QueuePacket *pp = omnetpp::fromAnyPtr<QueuePacket>(object); (void)pp;
     switch (field) {
-        case FIELD_arrivalTime: pp->setArrivalTime(string2double(value)); break;
+        case FIELD_creationTime: pp->setCreationTime(string2double(value)); break;
         default: throw omnetpp::cRuntimeError("Cannot set field %d of class 'QueuePacket'", field);
     }
 }
@@ -437,7 +437,7 @@ omnetpp::cValue QueuePacketDescriptor::getFieldValue(omnetpp::any_ptr object, in
     }
     QueuePacket *pp = omnetpp::fromAnyPtr<QueuePacket>(object); (void)pp;
     switch (field) {
-        case FIELD_arrivalTime: return pp->getArrivalTime();
+        case FIELD_creationTime: return pp->getCreationTime();
         default: throw omnetpp::cRuntimeError("Cannot return field %d of class 'QueuePacket' as cValue -- field index out of range?", field);
     }
 }
@@ -454,7 +454,7 @@ void QueuePacketDescriptor::setFieldValue(omnetpp::any_ptr object, int field, in
     }
     QueuePacket *pp = omnetpp::fromAnyPtr<QueuePacket>(object); (void)pp;
     switch (field) {
-        case FIELD_arrivalTime: pp->setArrivalTime(value.doubleValue()); break;
+        case FIELD_creationTime: pp->setCreationTime(value.doubleValue()); break;
         default: throw omnetpp::cRuntimeError("Cannot set field %d of class 'QueuePacket'", field);
     }
 }

@@ -1,3 +1,3 @@
 packet QueuePacket extends cPacket {
-    double arrivalTime; // Tempo di arrivo nel sistema
+    double creationTime; // Tempo di arrivo nel sistema
 }
