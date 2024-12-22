@@ -1,8 +1,8 @@
 version 3
-run Uniform-0-20241220-20:40:00-2408
+run Uniform-0-20241222-12:25:24-15208
 attr configname Uniform
-attr datetime 20241220-20:40:00
-attr datetimef 20241220-204000
+attr datetime 20241222-12:25:24
+attr datetimef 20241222-122524
 attr experiment Uniform
 attr inifile omnetpp.ini
 attr iterationvars ""
@@ -10,7 +10,7 @@ attr iterationvarsd ""
 attr iterationvarsf ""
 attr measurement ""
 attr network EdgeComputingNetwork
-attr processid 2408
+attr processid 15208
 attr repetition 0
 attr replication #0
 attr resultdir results
