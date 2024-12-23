@@ -45,7 +45,7 @@ void BaseStation::initialize() {
         return;
     }
 
-    
+    //impostiamo dimensioni griglia
     int width = parent->par("width").intValue();  
     int height = parent->par("height").intValue(); 
 
