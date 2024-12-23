@@ -24,10 +24,6 @@ void BaseStation::initialize() {
     forwardedSignal_ = registerSignal("forwardedSignal");
     droppedSignal_ = registerSignal("droppedSignal");
 
-    // Impostiamo l'area a 100x100
-    int width = 100;
-    int height = 100;
-
     // Assumiamo che numBaseStations sia già stato letto da qualche parte, per esempio dal NED
     cModule *parent = getParentModule();
     if (!parent) {
@@ -48,6 +44,10 @@ void BaseStation::initialize() {
         endSimulation();
         return;
     }
+
+    
+    int width = parent->par("width").intValue();  
+    int height = parent->par("height").intValue(); 
 
     // Calcolo della griglia
     // Cerchiamo di formare una griglia quadrata (o quasi) di basestation
