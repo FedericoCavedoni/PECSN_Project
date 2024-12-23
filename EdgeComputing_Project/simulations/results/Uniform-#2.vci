@@ -1,6 +1,6 @@
-file 4103 1734973827                                            
+file 3908 1734973827                                            
 version 3
-run Uniform-1-20241223-18:10:27-19396
+run Uniform-2-20241223-18:10:27-19396
 attr configname Uniform
 attr datetime 20241223-18:10:27
 attr datetimef 20241223-181027
@@ -12,11 +12,11 @@ attr iterationvarsf ""
 attr measurement ""
 attr network EdgeComputingNetwork
 attr processid 19396
-attr repetition 1
-attr replication #1
+attr repetition 2
+attr replication #2
 attr resultdir results
-attr runnumber 1
-attr seedset 1
+attr runnumber 2
+attr seedset 2
 config description "Unifrom distribution of users"
 config **.users[*].uniformDistribution true
 config network EdgeComputingNetwork
@@ -26,7 +26,7 @@ config **.users[*].rng-0 0
 config **.users[*].rng-1 1
 config **.users[*].rng-2 2
 config **.users[*].rng-3 3
-config seed-set 1
+config seed-set 2
 config repeat 10
 config **.width 100
 config **.height 100
@@ -51,8 +51,8 @@ attr source responseTimeSignal
 vector 3 EdgeComputingNetwork.baseStations[0] responseTime:vector ETV
 attr recordingmode vector
 attr source responseTimeSignal
-0	1620 584 0 111 0 97.145037631815 25 0 5 58 184
-1	2204 933 0 113 0 99.61554112693 40 0 5 96 304
-2	3137 607 11 104 2.040343687303 92.432235554252 17 1.468013390454 25.365007789728 181.90800047252 2800.6020941088
-3	3744 357 24 108 17.323362025781 96.090685812067 10 7.1 34.501806138895 204.17795139277 5161.0253847874
+0	1620 649 0 98 0 99.035490673455 28 0 5 72 222
+1	2269 721 0 100 0 99.943594745307 31 0 5 97 351
+2	2990 476 16 76 6.002097029429 73.002097029429 13 6 25.481166893743 220.20073341818 4157.8173147128
+3	3466 440 19 98 10.035490673455 99.035490673455 12 7.95110807631 45.643192419313 293.79178254248 9236.4984176198
 

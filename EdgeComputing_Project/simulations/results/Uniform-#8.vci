@@ -1,6 +1,6 @@
-file 4103 1734973827                                            
+file 3680 1734973827                                            
 version 3
-run Uniform-1-20241223-18:10:27-19396
+run Uniform-8-20241223-18:10:27-19396
 attr configname Uniform
 attr datetime 20241223-18:10:27
 attr datetimef 20241223-181027
@@ -12,11 +12,11 @@ attr iterationvarsf ""
 attr measurement ""
 attr network EdgeComputingNetwork
 attr processid 19396
-attr repetition 1
-attr replication #1
+attr repetition 8
+attr replication #8
 attr resultdir results
-attr runnumber 1
-attr seedset 1
+attr runnumber 8
+attr seedset 8
 config description "Unifrom distribution of users"
 config **.users[*].uniformDistribution true
 config network EdgeComputingNetwork
@@ -26,7 +26,7 @@ config **.users[*].rng-0 0
 config **.users[*].rng-1 1
 config **.users[*].rng-2 2
 config **.users[*].rng-3 3
-config seed-set 1
+config seed-set 8
 config repeat 10
 config **.width 100
 config **.height 100
@@ -45,14 +45,14 @@ attr source queueLengthSignal
 vector 1 EdgeComputingNetwork.baseStations[1] queueLength:vector ETV
 attr recordingmode vector
 attr source queueLengthSignal
-vector 2 EdgeComputingNetwork.baseStations[1] responseTime:vector ETV
+vector 2 EdgeComputingNetwork.baseStations[0] responseTime:vector ETV
 attr recordingmode vector
 attr source responseTimeSignal
-vector 3 EdgeComputingNetwork.baseStations[0] responseTime:vector ETV
+vector 3 EdgeComputingNetwork.baseStations[1] responseTime:vector ETV
 attr recordingmode vector
 attr source responseTimeSignal
-0	1620 584 0 111 0 97.145037631815 25 0 5 58 184
-1	2204 933 0 113 0 99.61554112693 40 0 5 96 304
-2	3137 607 11 104 2.040343687303 92.432235554252 17 1.468013390454 25.365007789728 181.90800047252 2800.6020941088
-3	3744 357 24 108 17.323362025781 96.090685812067 10 7.1 34.501806138895 204.17795139277 5161.0253847874
+0	1620 645 0 91 0 90.088279101137 28 0 5 74 246
+1	2265 600 0 94 0 96.99926578155 26 0 5 65 197
+2	2865 424 7 87 1.021786233996 84.838205048753 12 1 40.764391283757 244.48676650747 6838.0818619283
+3	3289 389 11 92 5.003932486542 94.096430950124 11 5 33.378164415088 229.12467875424 6104.8907485363
 

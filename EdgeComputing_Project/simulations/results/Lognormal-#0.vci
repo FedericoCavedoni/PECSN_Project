@@ -1,24 +1,26 @@
-file 4103 1734973827                                            
+file 2243 1734974203                                            
 version 3
-run Uniform-1-20241223-18:10:27-19396
-attr configname Uniform
-attr datetime 20241223-18:10:27
-attr datetimef 20241223-181027
-attr experiment Uniform
+run Lognormal-0-20241223-18:15:24-11444
+attr configname Lognormal
+attr datetime 20241223-18:15:24
+attr datetimef 20241223-181524
+attr experiment Lognormal
 attr inifile omnetpp.ini
 attr iterationvars ""
 attr iterationvarsd ""
 attr iterationvarsf ""
 attr measurement ""
 attr network EdgeComputingNetwork
-attr processid 19396
-attr repetition 1
-attr replication #1
+attr processid 11444
+attr repetition 0
+attr replication #0
 attr resultdir results
-attr runnumber 1
-attr seedset 1
-config description "Unifrom distribution of users"
-config **.users[*].uniformDistribution true
+attr runnumber 0
+attr seedset 0
+config description "Lognormal distribution of users"
+config **.users[*].uniformDistribution false
+config **.users[*].mean 50
+config **.users[*].std_dev 20
 config network EdgeComputingNetwork
 config sim-time-limit 100s
 config num-rngs 4
@@ -26,7 +28,7 @@ config **.users[*].rng-0 0
 config **.users[*].rng-1 1
 config **.users[*].rng-2 2
 config **.users[*].rng-3 3
-config seed-set 1
+config seed-set 0
 config repeat 10
 config **.width 100
 config **.height 100
@@ -51,8 +53,8 @@ attr source responseTimeSignal
 vector 3 EdgeComputingNetwork.baseStations[0] responseTime:vector ETV
 attr recordingmode vector
 attr source responseTimeSignal
-0	1620 584 0 111 0 97.145037631815 25 0 5 58 184
-1	2204 933 0 113 0 99.61554112693 40 0 5 96 304
-2	3137 607 11 104 2.040343687303 92.432235554252 17 1.468013390454 25.365007789728 181.90800047252 2800.6020941088
-3	3744 357 24 108 17.323362025781 96.090685812067 10 7.1 34.501806138895 204.17795139277 5161.0253847874
+0	1688 222 0 43 0 29.537048796647 10 0 7 39 201
+1	1910 243 0 41 0 27.314664971959 11 0 6 29 109
+2	2153 63 11 22 7.120466788428 14.120466788428 2 7.1 14.063197589465 21.163197589465 248.18352644033
+3	2216 25 36 36 26.002626823685 26.002626823685 1 26 26 26 676
 
