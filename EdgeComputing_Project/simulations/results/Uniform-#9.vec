@@ -1,0 +1,113 @@
+version 3
+run Uniform-9-20241223-18:10:27-19396
+attr configname Uniform
+attr datetime 20241223-18:10:27
+attr datetimef 20241223-181027
+attr experiment Uniform
+attr inifile omnetpp.ini
+attr iterationvars ""
+attr iterationvarsd ""
+attr iterationvarsf ""
+attr measurement ""
+attr network EdgeComputingNetwork
+attr processid 19396
+attr repetition 9
+attr replication #9
+attr resultdir results
+attr runnumber 9
+attr seedset 9
+config description "Unifrom distribution of users"
+config **.users[*].uniformDistribution true
+config network EdgeComputingNetwork
+config sim-time-limit 100s
+config num-rngs 4
+config **.users[*].rng-0 0
+config **.users[*].rng-1 1
+config **.users[*].rng-2 2
+config **.users[*].rng-3 3
+config seed-set 9
+config repeat 10
+config **.width 100
+config **.height 100
+config **.numBaseStations 2
+config **.numUsers 3
+config **.baseStations[*].serviceRate 1
+config **.baseStations[*].delay 0.100
+config **.baseStations[*].queueSize 10
+config **.baseStations[*].locallyManaged false
+config **.users[*].intervalRate 1/10
+config **.users[*].sizeRate 1/10
+
+vector 0 EdgeComputingNetwork.baseStations[0] queueLength:vector ETV
+attr recordingmode vector
+attr source queueLengthSignal
+vector 1 EdgeComputingNetwork.baseStations[1] queueLength:vector ETV
+attr recordingmode vector
+attr source queueLengthSignal
+vector 2 EdgeComputingNetwork.baseStations[0] responseTime:vector ETV
+attr recordingmode vector
+attr source responseTimeSignal
+vector 3 EdgeComputingNetwork.baseStations[1] responseTime:vector ETV
+attr recordingmode vector
+attr source responseTimeSignal
+0	0	0	0
+0	6	0.227312151282	1
+0	9	0.296402820703	2
+0	13	16.217190074825	3
+0	18	18.260878681094	4
+0	20	20.788294913467	5
+0	21	22.227312151282	4
+0	26	30.001378053187	5
+0	32	37.456622077051	6
+0	36	40.04341472637	7
+0	39	44.227312151282	6
+0	42	46.126429446493	7
+0	47	51.817605768512	8
+0	54	72.227312151282	7
+0	57	74.960444561253	8
+0	61	78.226823267518	9
+0	64	82.227312151282	8
+0	67	85.59125213027	9
+0	72	91.227312151282	8
+0	75	98.227312151282	7
+0	76	99.227312151282	6
+1	0	0	0
+1	2	0.048576415737	1
+1	8	0.253231562906	2
+1	11	7.964761411147	3
+1	15	16.859223914519	4
+1	22	24.048576415737	3
+1	24	25.135097421314	4
+1	28	34.372969519316	5
+1	30	35.801475753413	6
+1	34	39.65033121803	7
+1	38	42.035978334649	8
+1	43	48.048576415737	7
+1	45	48.868861595745	8
+1	49	52.052091284547	9
+1	50	60.048576415737	8
+1	51	65.048576415737	7
+1	53	68.953307476813	8
+1	59	76.490769712611	9
+1	63	79.146455801393	10
+1	68	88.048576415737	9
+1	69	90.048576415737	8
+1	71	90.849794449357	9
+1	73	94.048576415737	8
+1	74	95.048576415737	7
+2	21	22.227312151282	22
+2	39	44.227312151282	44.030909330579
+2	54	72.227312151282	56.010122076457
+2	64	82.227312151282	64.066433470188
+2	72	91.227312151282	70.439017237815
+2	75	98.227312151282	68.225934098095
+2	76	99.227312151282	61.770690074231
+3	22	24.048576415737	24
+3	43	48.048576415737	47.795344852831
+3	50	60.048576415737	52.08381500459
+3	51	65.048576415737	48.189352501218
+3	68	88.048576415737	62.913478994423
+3	69	90.048576415737	55.675606896421
+3	73	94.048576415737	58.247100662324
+3	74	95.048576415737	55.398245197707
+

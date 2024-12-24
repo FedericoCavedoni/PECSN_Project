@@ -1,22 +1,22 @@
-file 3903 1734973827                                            
+file 3550 1734973827                                            
 version 3
-run Uniform-0-20241223-18:10:27-19396
+run Uniform-7-20241223-18:10:27-19396
 attr configname Uniform
 attr datetime 20241223-18:10:27
 attr datetimef 20241223-181027
 attr experiment Uniform
-attr inifile ../simulations/omnetpp.ini
+attr inifile omnetpp.ini
 attr iterationvars ""
 attr iterationvarsd ""
 attr iterationvarsf ""
 attr measurement ""
 attr network EdgeComputingNetwork
-attr processid 23108
-attr repetition 0
-attr replication #0
+attr processid 19396
+attr repetition 7
+attr replication #7
 attr resultdir results
-attr runnumber 0
-attr seedset 0
+attr runnumber 7
+attr seedset 7
 config description "Unifrom distribution of users"
 config **.users[*].uniformDistribution true
 config network EdgeComputingNetwork
@@ -26,7 +26,7 @@ config **.users[*].rng-0 0
 config **.users[*].rng-1 1
 config **.users[*].rng-2 2
 config **.users[*].rng-3 3
-config seed-set 0
+config seed-set 7
 config repeat 10
 config **.width 100
 config **.height 100
@@ -45,14 +45,14 @@ attr source queueLengthSignal
 vector 1 EdgeComputingNetwork.baseStations[1] queueLength:vector ETV
 attr recordingmode vector
 attr source queueLengthSignal
-vector 2 EdgeComputingNetwork.baseStations[0] responseTime:vector ETV
+vector 2 EdgeComputingNetwork.baseStations[1] responseTime:vector ETV
 attr recordingmode vector
 attr source responseTimeSignal
-vector 3 EdgeComputingNetwork.baseStations[1] responseTime:vector ETV
+vector 3 EdgeComputingNetwork.baseStations[0] responseTime:vector ETV
 attr recordingmode vector
 attr source responseTimeSignal
-0	1620 758 0 127 0 97.120466788428 32 0 10 216 1788
-1	2378 743 0 124 0 96.590213603095 31 0 10 231 1967
-2	3121 408 11 127 7.120466788428 97.120466788428 11 7.1 55.699556869253 366.0839599885 13968.56538542
-3	3529 372 36 122 26.002626823685 94.002626823685 10 26 54.293617144022 480.51183209607 23715.803780994
+0	1620 412 0 94 0 96.842900544053 18 0 7 55 245
+1	2032 839 0 97 0 98.500784190216 36 0 7 120 506
+2	2871 511 10 95 2.047924377385 98.047924377385 14 1.630522944717 40.92014840932 263.97375183185 6830.2725192661
+3	3382 166 17 87 10.203322780471 93.624325719871 5 9.1 61.64943732928 116.56986686347 4632.2193741625
 

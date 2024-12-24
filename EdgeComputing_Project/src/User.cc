@@ -33,9 +33,8 @@ void User::initialize() {
         EV << "[DEBUG] User " << getIndex() << " positioned uniformly at (" << x << ", " << y << ")\n";
     }
     else {
-        // Distribuzione lognormale
-        double mean = par("mean").doubleValue();        
-        double std_dev = par("std_dev").doubleValue();    
+        double mean = par("mean").doubleValue();
+        double std_dev = par("std_dev").doubleValue();
 
         if (mean <= 0 || std_dev <= 0) {
             EV << "[ERROR] Invalid 'mean' or 'std_dev' for lognormal distribution.\n";
@@ -43,8 +42,8 @@ void User::initialize() {
             return;
         }
 
-        x = lognormal(mean, std_dev, 0);
-        y = lognormal(mean, std_dev, 1);
+        x = std::min(lognormal(mean, std_dev, 0), 100.0);
+        y = std::min(lognormal(mean, std_dev, 1), 100.0);
 
         EV << "[DEBUG] User " << getIndex() << " positioned lognormally at (" << x << ", " << y << ")\n";
     }

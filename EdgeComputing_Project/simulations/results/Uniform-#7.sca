@@ -1,5 +1,5 @@
 version 3
-run Uniform-4-20241223-18:10:27-19396
+run Uniform-7-20241223-18:10:27-19396
 attr configname Uniform
 attr datetime 20241223-18:10:27
 attr datetimef 20241223-181027
@@ -11,11 +11,11 @@ attr iterationvarsf ""
 attr measurement ""
 attr network EdgeComputingNetwork
 attr processid 19396
-attr repetition 4
-attr replication #4
+attr repetition 7
+attr replication #7
 attr resultdir results
-attr runnumber 4
-attr seedset 4
+attr runnumber 7
+attr seedset 7
 config description "Unifrom distribution of users"
 config **.users[*].uniformDistribution true
 config network EdgeComputingNetwork
@@ -25,7 +25,7 @@ config **.users[*].rng-0 0
 config **.users[*].rng-1 1
 config **.users[*].rng-2 2
 config **.users[*].rng-3 3
-config seed-set 4
+config seed-set 7
 config repeat 10
 config **.width 100
 config **.height 100
@@ -46,13 +46,13 @@ par EdgeComputingNetwork.baseStations[0] queueSize 10
 scalar EdgeComputingNetwork.baseStations[0] dropped:count 0
 attr recordingmode count
 attr source droppedSignal
-scalar EdgeComputingNetwork.baseStations[0] forwarded:count 7
+scalar EdgeComputingNetwork.baseStations[0] forwarded:count 6
 attr recordingmode count
 attr source forwardedSignal
-scalar EdgeComputingNetwork.baseStations[0] queueLength:mean 5.5757575757576
+scalar EdgeComputingNetwork.baseStations[0] queueLength:mean 3.0555555555556
 attr recordingmode mean
 attr source queueLengthSignal
-scalar EdgeComputingNetwork.baseStations[0] responseTime:mean 40.743379829561
+scalar EdgeComputingNetwork.baseStations[0] responseTime:mean 23.313973372693
 attr recordingmode mean
 attr source responseTimeSignal
 par EdgeComputingNetwork.baseStations[1] typename "\"edgecomputing_project.BaseStation\""
@@ -60,16 +60,16 @@ par EdgeComputingNetwork.baseStations[1] delay 0.1
 par EdgeComputingNetwork.baseStations[1] serviceRate 1
 par EdgeComputingNetwork.baseStations[1] locallyManaged false
 par EdgeComputingNetwork.baseStations[1] queueSize 10
-scalar EdgeComputingNetwork.baseStations[1] dropped:count 1
+scalar EdgeComputingNetwork.baseStations[1] dropped:count 0
 attr recordingmode count
 attr source droppedSignal
-scalar EdgeComputingNetwork.baseStations[1] forwarded:count 7
+scalar EdgeComputingNetwork.baseStations[1] forwarded:count 6
 attr recordingmode count
 attr source forwardedSignal
-scalar EdgeComputingNetwork.baseStations[1] queueLength:mean 5.5217391304348
+scalar EdgeComputingNetwork.baseStations[1] queueLength:mean 3.3333333333333
 attr recordingmode mean
 attr source queueLengthSignal
-scalar EdgeComputingNetwork.baseStations[1] responseTime:mean 39.113689205892
+scalar EdgeComputingNetwork.baseStations[1] responseTime:mean 18.855267987989
 attr recordingmode mean
 attr source responseTimeSignal
 par EdgeComputingNetwork.users[0] typename "\"edgecomputing_project.User\""

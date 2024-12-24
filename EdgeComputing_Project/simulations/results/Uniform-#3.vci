@@ -1,22 +1,22 @@
-file 3903 1734973827                                            
+file 3941 1734973827                                            
 version 3
-run Uniform-0-20241223-18:10:27-19396
+run Uniform-3-20241223-18:10:27-19396
 attr configname Uniform
 attr datetime 20241223-18:10:27
 attr datetimef 20241223-181027
 attr experiment Uniform
-attr inifile ../simulations/omnetpp.ini
+attr inifile omnetpp.ini
 attr iterationvars ""
 attr iterationvarsd ""
 attr iterationvarsf ""
 attr measurement ""
 attr network EdgeComputingNetwork
-attr processid 23108
-attr repetition 0
-attr replication #0
+attr processid 19396
+attr repetition 3
+attr replication #3
 attr resultdir results
-attr runnumber 0
-attr seedset 0
+attr runnumber 3
+attr seedset 3
 config description "Unifrom distribution of users"
 config **.users[*].uniformDistribution true
 config network EdgeComputingNetwork
@@ -26,7 +26,7 @@ config **.users[*].rng-0 0
 config **.users[*].rng-1 1
 config **.users[*].rng-2 2
 config **.users[*].rng-3 3
-config seed-set 0
+config seed-set 3
 config repeat 10
 config **.width 100
 config **.height 100
@@ -51,8 +51,8 @@ attr source responseTimeSignal
 vector 3 EdgeComputingNetwork.baseStations[1] responseTime:vector ETV
 attr recordingmode vector
 attr source responseTimeSignal
-0	1620 758 0 127 0 97.120466788428 32 0 10 216 1788
-1	2378 743 0 124 0 96.590213603095 31 0 10 231 1967
-2	3121 408 11 127 7.120466788428 97.120466788428 11 7.1 55.699556869253 366.0839599885 13968.56538542
-3	3529 372 36 122 26.002626823685 94.002626823685 10 26 54.293617144022 480.51183209607 23715.803780994
+0	1620 843 0 93 0 94.63119895674 36 0 5 114 418
+1	2463 557 0 102 0 99.988793096447 24 0 6 76 288
+2	3020 552 10 88 10.072143007641 87.072143007641 15 8.903105552727 35.208459994038 252.13361459494 5099.841079375
+3	3572 367 25 99 20.148353261831 98.148353261831 10 20 53.529546534783 348.02796509465 13118.460843403
 

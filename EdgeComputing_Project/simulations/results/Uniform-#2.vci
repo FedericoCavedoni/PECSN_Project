@@ -1,22 +1,22 @@
-file 3903 1734973827                                            
+file 3908 1734973827                                            
 version 3
-run Uniform-0-20241223-18:10:27-19396
+run Uniform-2-20241223-18:10:27-19396
 attr configname Uniform
 attr datetime 20241223-18:10:27
 attr datetimef 20241223-181027
 attr experiment Uniform
-attr inifile ../simulations/omnetpp.ini
+attr inifile omnetpp.ini
 attr iterationvars ""
 attr iterationvarsd ""
 attr iterationvarsf ""
 attr measurement ""
 attr network EdgeComputingNetwork
-attr processid 23108
-attr repetition 0
-attr replication #0
+attr processid 19396
+attr repetition 2
+attr replication #2
 attr resultdir results
-attr runnumber 0
-attr seedset 0
+attr runnumber 2
+attr seedset 2
 config description "Unifrom distribution of users"
 config **.users[*].uniformDistribution true
 config network EdgeComputingNetwork
@@ -26,7 +26,7 @@ config **.users[*].rng-0 0
 config **.users[*].rng-1 1
 config **.users[*].rng-2 2
 config **.users[*].rng-3 3
-config seed-set 0
+config seed-set 2
 config repeat 10
 config **.width 100
 config **.height 100
@@ -45,14 +45,14 @@ attr source queueLengthSignal
 vector 1 EdgeComputingNetwork.baseStations[1] queueLength:vector ETV
 attr recordingmode vector
 attr source queueLengthSignal
-vector 2 EdgeComputingNetwork.baseStations[0] responseTime:vector ETV
+vector 2 EdgeComputingNetwork.baseStations[1] responseTime:vector ETV
 attr recordingmode vector
 attr source responseTimeSignal
-vector 3 EdgeComputingNetwork.baseStations[1] responseTime:vector ETV
+vector 3 EdgeComputingNetwork.baseStations[0] responseTime:vector ETV
 attr recordingmode vector
 attr source responseTimeSignal
-0	1620 758 0 127 0 97.120466788428 32 0 10 216 1788
-1	2378 743 0 124 0 96.590213603095 31 0 10 231 1967
-2	3121 408 11 127 7.120466788428 97.120466788428 11 7.1 55.699556869253 366.0839599885 13968.56538542
-3	3529 372 36 122 26.002626823685 94.002626823685 10 26 54.293617144022 480.51183209607 23715.803780994
+0	1620 649 0 98 0 99.035490673455 28 0 5 72 222
+1	2269 721 0 100 0 99.943594745307 31 0 5 97 351
+2	2990 476 16 76 6.002097029429 73.002097029429 13 6 25.481166893743 220.20073341818 4157.8173147128
+3	3466 440 19 98 10.035490673455 99.035490673455 12 7.95110807631 45.643192419313 293.79178254248 9236.4984176198
 

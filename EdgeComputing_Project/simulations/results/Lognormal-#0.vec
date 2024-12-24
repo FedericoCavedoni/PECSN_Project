@@ -1,24 +1,25 @@
-file 3903 1734973827                                            
 version 3
-run Uniform-0-20241223-18:10:27-19396
-attr configname Uniform
-attr datetime 20241223-18:10:27
-attr datetimef 20241223-181027
-attr experiment Uniform
-attr inifile ../simulations/omnetpp.ini
+run Lognormal-0-20241223-18:15:24-11444
+attr configname Lognormal
+attr datetime 20241223-18:15:24
+attr datetimef 20241223-181524
+attr experiment Lognormal
+attr inifile omnetpp.ini
 attr iterationvars ""
 attr iterationvarsd ""
 attr iterationvarsf ""
 attr measurement ""
 attr network EdgeComputingNetwork
-attr processid 23108
+attr processid 11444
 attr repetition 0
 attr replication #0
 attr resultdir results
 attr runnumber 0
 attr seedset 0
-config description "Unifrom distribution of users"
-config **.users[*].uniformDistribution true
+config description "Lognormal distribution of users"
+config **.users[*].uniformDistribution false
+config **.users[*].mean 50
+config **.users[*].std_dev 20
 config network EdgeComputingNetwork
 config sim-time-limit 100s
 config num-rngs 4
@@ -45,14 +46,34 @@ attr source queueLengthSignal
 vector 1 EdgeComputingNetwork.baseStations[1] queueLength:vector ETV
 attr recordingmode vector
 attr source queueLengthSignal
-vector 2 EdgeComputingNetwork.baseStations[0] responseTime:vector ETV
+vector 2 EdgeComputingNetwork.baseStations[1] responseTime:vector ETV
 attr recordingmode vector
 attr source responseTimeSignal
-vector 3 EdgeComputingNetwork.baseStations[1] responseTime:vector ETV
+vector 3 EdgeComputingNetwork.baseStations[0] responseTime:vector ETV
 attr recordingmode vector
 attr source responseTimeSignal
-0	1620 758 0 127 0 97.120466788428 32 0 10 216 1788
-1	2378 743 0 124 0 96.590213603095 31 0 10 231 1967
-2	3121 408 11 127 7.120466788428 97.120466788428 11 7.1 55.699556869253 366.0839599885 13968.56538542
-3	3529 372 36 122 26.002626823685 94.002626823685 10 26 54.293617144022 480.51183209607 23715.803780994
+0	0	0	0
+0	2	0.002626823685	1
+0	10	0.753971168072	2
+0	16	11.443104815578	3
+0	21	12.736547430486	4
+0	30	21.160245262792	5
+0	35	25.457867194504	6
+0	36	26.002626823685	5
+0	38	26.799872684608	6
+0	43	29.537048796647	7
+1	0	0	0
+1	7	0.120466788428	1
+1	8	0.157269198963	2
+1	11	7.120466788428	1
+1	14	8.105450732611	2
+1	19	12.472347651381	3
+1	22	14.120466788428	2
+1	25	19.176601456581	3
+1	28	19.622750624957	4
+1	33	25.368607373071	5
+1	41	27.314664971959	6
+2	11	7.120466788428	7.1
+2	22	14.120466788428	14.063197589465
+3	36	26.002626823685	26
 

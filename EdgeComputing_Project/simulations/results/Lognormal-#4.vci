@@ -1,24 +1,26 @@
-file 3903 1734973827                                            
+file 1925 1734974796                                            
 version 3
-run Uniform-0-20241223-18:10:27-19396
-attr configname Uniform
-attr datetime 20241223-18:10:27
-attr datetimef 20241223-181027
-attr experiment Uniform
-attr inifile ../simulations/omnetpp.ini
+run Lognormal-4-20241223-18:25:43-1452
+attr configname Lognormal
+attr datetime 20241223-18:25:43
+attr datetimef 20241223-182543
+attr experiment Lognormal
+attr inifile omnetpp.ini
 attr iterationvars ""
 attr iterationvarsd ""
 attr iterationvarsf ""
 attr measurement ""
 attr network EdgeComputingNetwork
-attr processid 23108
-attr repetition 0
-attr replication #0
+attr processid 1452
+attr repetition 4
+attr replication #4
 attr resultdir results
-attr runnumber 0
-attr seedset 0
-config description "Unifrom distribution of users"
-config **.users[*].uniformDistribution true
+attr runnumber 4
+attr seedset 4
+config description "Lognormal distribution of users"
+config **.users[*].uniformDistribution false
+config **.users[*].mean 3.91
+config **.users[*].std_dev 0.4
 config network EdgeComputingNetwork
 config sim-time-limit 100s
 config num-rngs 4
@@ -26,7 +28,7 @@ config **.users[*].rng-0 0
 config **.users[*].rng-1 1
 config **.users[*].rng-2 2
 config **.users[*].rng-3 3
-config seed-set 0
+config seed-set 4
 config repeat 10
 config **.width 100
 config **.height 100
@@ -45,14 +47,10 @@ attr source queueLengthSignal
 vector 1 EdgeComputingNetwork.baseStations[1] queueLength:vector ETV
 attr recordingmode vector
 attr source queueLengthSignal
-vector 2 EdgeComputingNetwork.baseStations[0] responseTime:vector ETV
+vector 2 EdgeComputingNetwork.baseStations[1] responseTime:vector ETV
 attr recordingmode vector
 attr source responseTimeSignal
-vector 3 EdgeComputingNetwork.baseStations[1] responseTime:vector ETV
-attr recordingmode vector
-attr source responseTimeSignal
-0	1620 758 0 127 0 97.120466788428 32 0 10 216 1788
-1	2378 743 0 124 0 96.590213603095 31 0 10 231 1967
-2	3121 408 11 127 7.120466788428 97.120466788428 11 7.1 55.699556869253 366.0839599885 13968.56538542
-3	3529 372 36 122 26.002626823685 94.002626823685 10 26 54.293617144022 480.51183209607 23715.803780994
+0	1559 76 0 16 0 8.535895225353 4 0 3 6 14
+1	1635 192 0 21 0 12.007905486116 9 0 3 16 36
+2	1827 96 9 21 5.007905486116 12.007905486116 3 5 8.973761747485 20.281848778428 145.32036189058
 
