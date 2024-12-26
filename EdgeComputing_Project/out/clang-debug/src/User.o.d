@@ -1,11 +1,11 @@
-../out/clang-debug/src/User.o: User.cc User.h \
-  C:/Users/Utente/Drake/OMNET/omnetpp-6.0.3/include/omnetpp.h \
-  BaseStation.h QueuePacket_m.h
+out/clang-debug//src/User.o: src/User.cc src/User.h \
+  C:/Users/fedec/Desktop/omnetpp-6.0.3/include/omnetpp.h \
+  src/BaseStation.h src/QueuePacket_m.h
 
-User.h:
+src/User.h:
 
-C:/Users/Utente/Drake/OMNET/omnetpp-6.0.3/include/omnetpp.h:
+C:/Users/fedec/Desktop/omnetpp-6.0.3/include/omnetpp.h:
 
-BaseStation.h:
+src/BaseStation.h:
 
-QueuePacket_m.h:
+src/QueuePacket_m.h:

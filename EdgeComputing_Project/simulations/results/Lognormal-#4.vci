@@ -1,5 +1,5 @@
-file 1925 1734974796                                            
-version 3
+file 1925 1735227940                                            
+version 2
 run Lognormal-4-20241223-18:25:43-1452
 attr configname Lognormal
 attr datetime 20241223-18:25:43
@@ -44,13 +44,12 @@ config **.users[*].sizeRate 1/10
 vector 0 EdgeComputingNetwork.baseStations[0] queueLength:vector ETV
 attr recordingmode vector
 attr source queueLengthSignal
+0	1559 76 0 16 0 8.535895225353 4 0 3 6 14
 vector 1 EdgeComputingNetwork.baseStations[1] queueLength:vector ETV
 attr recordingmode vector
 attr source queueLengthSignal
+1	1635 192 0 21 0 12.007905486116 9 0 3 16 36
 vector 2 EdgeComputingNetwork.baseStations[1] responseTime:vector ETV
 attr recordingmode vector
 attr source responseTimeSignal
-0	1559 76 0 16 0 8.535895225353 4 0 3 6 14
-1	1635 192 0 21 0 12.007905486116 9 0 3 16 36
-2	1827 96 9 21 5.007905486116 12.007905486116 3 5 8.973761747485 20.281848778428 145.32036189058
-
+2	1827 98 9 21 5.007905486116 12.007905486116 3 5 8.973761747485 20.281848778428 145.32036189058

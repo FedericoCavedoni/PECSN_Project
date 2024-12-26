@@ -1,5 +1,5 @@
-file 3941 1734973827                                            
-version 3
+file 3941 1735227940                                            
+version 2
 run Uniform-3-20241223-18:10:27-19396
 attr configname Uniform
 attr datetime 20241223-18:10:27
@@ -42,17 +42,16 @@ config **.users[*].sizeRate 1/10
 vector 0 EdgeComputingNetwork.baseStations[0] queueLength:vector ETV
 attr recordingmode vector
 attr source queueLengthSignal
+0	1620 843 0 93 0 94.63119895674 36 0 5 114 418
 vector 1 EdgeComputingNetwork.baseStations[1] queueLength:vector ETV
 attr recordingmode vector
 attr source queueLengthSignal
+1	2463 557 0 102 0 99.988793096447 24 0 6 76 288
 vector 2 EdgeComputingNetwork.baseStations[0] responseTime:vector ETV
 attr recordingmode vector
 attr source responseTimeSignal
+2	3020 552 10 88 10.072143007641 87.072143007641 15 8.903105552727 35.208459994038 252.13361459494 5099.841079375
 vector 3 EdgeComputingNetwork.baseStations[1] responseTime:vector ETV
 attr recordingmode vector
 attr source responseTimeSignal
-0	1620 843 0 93 0 94.63119895674 36 0 5 114 418
-1	2463 557 0 102 0 99.988793096447 24 0 6 76 288
-2	3020 552 10 88 10.072143007641 87.072143007641 15 8.903105552727 35.208459994038 252.13361459494 5099.841079375
-3	3572 367 25 99 20.148353261831 98.148353261831 10 20 53.529546534783 348.02796509465 13118.460843403
-
+3	3572 369 25 99 20.148353261831 98.148353261831 10 20 53.529546534783 348.02796509465 13118.460843403
