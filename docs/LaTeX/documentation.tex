@@ -38,7 +38,11 @@
         {\LARGE{\bf Edge Computing\\Project Documentation}}
     \end{center}
     \begin{center}
-        {?? Dicembre 2024}
+        {
+        \makeatletter    
+        \@date
+        \makeatother    
+        }
     \end{center}
     \vspace{30mm}
     
@@ -133,7 +137,7 @@ The following modules have been defined:
 \begin{itemize}
     \item \textbf{EdgeNetwork}: compound module which represents the system and hosts the following simple modules
     \begin{itemize}
-        \item \textbf{BaseStation}: simple module which receives, precesses and (in case of scenario b)) forwards packets sent by users according to the specified distribution. 
+        \item \textbf{BaseStation}: simple module which receives, precesses and (in case of scenario b) forwards packets sent by users according to the specified distribution. 
         \item \textbf{User}: simple module which generates and sends packets (with length dependent by the specified distribution) to the nearest base station.
     \end{itemize}    
 \end{itemize}
@@ -141,7 +145,7 @@ The following modules have been defined:
 \subsection{Modules' behaviour}
 \subsubsection{EdgeComputingNetwork}
 \begin{itemize}
-    \item Hosts base stations and users physically and memorizes their parameters in order to retreive some of them during the simulation via parent pointers.
+    \item Hosts base stations and users physically and memorizes their parameters in order to retreive them during the simulation via parent pointers.
 \end{itemize}
 \subsubsection{BaseStation}
 \begin{itemize}
@@ -150,10 +154,10 @@ The following modules have been defined:
         \item [\textbf{Locally managed:}] if the queue has enough free slots the base station enqueues the packet to be processed, ignoring all other base stations.
         \item [\textbf{Forwarding:}] when a packet is received the base station searches for the base statio with the lowest load on their queue and forwards the packet to it. If and only if every other base station has a higher load, the packet is served locally.
     \end{itemize}
-    \item It also records statistics every time a packet is \textit{dropped} or \textit{forwarded} and about \textit{queue length} and \textit{response time}.
+    \item It also records statistics every time a packet is \textit{dropped} or \textit{forwarded} (as number of packets) and about \textit{queue length} and \textit{response time} (in order to compute its average).
 \end{itemize}
 
-\subsection{User}
+\subsubsection{User}
 \begin{itemize}
     \item Generates packets with length and rate which are exponentially distributed and sends them to the \textit{nearest}\footnote{According to the euclidean distance}
     % non so se è superfluo specificarlo
@@ -163,4 +167,5 @@ The following modules have been defined:
 \newpage
 \section{Verification}
 
+\section{Calibration}
 \end{document}
