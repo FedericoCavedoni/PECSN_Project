@@ -1,1 +1,10 @@
 /scripts
+/EdgeComputing_Project/out
+/EdgeComputing_Project/.settings
+EdgeComputing_Project/Makefile
+EdgeComputing_Project/EdgeComputing_Project_dbg.exe
+EdgeComputing_Project/.cproject
+EdgeComputing_Project/.nedexclusions
+EdgeComputing_Project/.nedfolders
+EdgeComputing_Project/.oppbuildspec
+EdgeComputing_Project/.project
