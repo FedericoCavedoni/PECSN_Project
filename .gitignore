@@ -13,3 +13,6 @@ EdgeComputing_Project/simulations/.cmdenv-log
 EdgeComputing_Project/simulations/.qtenvrc
 EdgeComputing_Project/simulations/run
 EdgeComputing_Project/simulations/Uniform.anf
+EdgeComputing_Project/src/.qtenvrc
+EdgeComputing_Project/src/EdgeComputing_Project_dbg.exe
+EdgeComputing_Project/src/Makefile
