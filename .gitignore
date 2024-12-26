@@ -8,3 +8,8 @@ EdgeComputing_Project/.nedexclusions
 EdgeComputing_Project/.nedfolders
 EdgeComputing_Project/.oppbuildspec
 EdgeComputing_Project/.project
+/EdgeComputing_Project/simulations/results
+EdgeComputing_Project/simulations/.cmdenv-log
+EdgeComputing_Project/simulations/.qtenvrc
+EdgeComputing_Project/simulations/run
+EdgeComputing_Project/simulations/Uniform.anf
