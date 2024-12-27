@@ -16,6 +16,8 @@ private:
     int queueSize;
     std::queue<QueuePacket*> taskQueue;
 
+    bool idle;
+
     double x, y;
     int numBaseStations;
 
