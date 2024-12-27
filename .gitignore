@@ -1,4 +1,3 @@
-<<<<<<< Updated upstream
 docs/LaTeX/*.aux
 docs/LaTeX/*.fdb*
 docs/LaTeX/*.fls
@@ -7,6 +6,7 @@ docs/LaTeX/*.out
 docs/LaTeX/*.synctex*
 docs/LaTeX/*.toc
 docs/LaTeX/*.png
+docs/LaTeX/*.jpg
 docs/LaTeX/cherubinFrontespizio*
 docs/Report.pdf
 EdgeComputing_Project/.settings/*
@@ -24,26 +24,3 @@ EdgeComputing_Project/.nedfolders
 EdgeComputing_Project/.oppbuildspec
 EdgeComputing_Project/.project
 EdgeComputing_Project/Makefile
-=======
-/scripts
-/EdgeComputing_Project/out
-/EdgeComputing_Project/.settings
-EdgeComputing_Project/Makefile
-EdgeComputing_Project/EdgeComputing_Project_dbg.exe
-EdgeComputing_Project/.cproject
-EdgeComputing_Project/.nedexclusions
-EdgeComputing_Project/.nedfolders
-EdgeComputing_Project/.oppbuildspec
-EdgeComputing_Project/.project
-/EdgeComputing_Project/simulations/results
-EdgeComputing_Project/simulations/.cmdenv-log
-EdgeComputing_Project/simulations/.qtenvrc
-EdgeComputing_Project/simulations/run
-EdgeComputing_Project/simulations/Uniform.anf
-EdgeComputing_Project/simulations/Lognormal.anf
-EdgeComputing_Project/src/.qtenvrc
-EdgeComputing_Project/src/EdgeComputing_Project_dbg.exe
-EdgeComputing_Project/src/Makefile
-EdgeComputing_Project/src/run
-EdgeComputing_Project/src/EdgeComputing_Project.exe
->>>>>>> Stashed changes
