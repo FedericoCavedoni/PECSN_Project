@@ -5,8 +5,7 @@
 Define_Module(BaseStation);
 
 BaseStation::~BaseStation() {
-    // Dealloca tutti i pacchetti rimasti nella coda
-    while (taskQueue.size() > 0) {
+    while (!taskQueue.empty()) {
         QueuePacket *pkt = taskQueue.front();
         taskQueue.pop();
         delete pkt;
@@ -24,7 +23,8 @@ void BaseStation::initialize() {
     forwardedSignal_ = registerSignal("forwardedSignal");
     droppedSignal_ = registerSignal("droppedSignal");
 
-    // Assumiamo che numBaseStations sia già stato letto da qualche parte, per esempio dal NED
+    idle = true;
+
     cModule *parent = getParentModule();
     if (!parent) {
         EV << "[ERROR] Parent module not found.\n";
@@ -45,12 +45,9 @@ void BaseStation::initialize() {
         return;
     }
 
-    //impostiamo dimensioni griglia
     int width = parent->par("width").intValue();  
     int height = parent->par("height").intValue(); 
 
-    // Calcolo della griglia
-    // Cerchiamo di formare una griglia quadrata (o quasi) di basestation
     int gridRows = (int)floor(sqrt((double)numBaseStations));
     int gridCols = (int)ceil((double)numBaseStations / (double)gridRows);
 
@@ -61,7 +58,6 @@ void BaseStation::initialize() {
     double cellWidth = (double)width / (double)gridCols;
     double cellHeight = (double)height / (double)gridRows;
 
-    // Posizioniamo la base station al centro della sua cella
     x = (col + 0.5) * cellWidth;
     y = (row + 0.5) * cellHeight;
 
@@ -83,7 +79,6 @@ void BaseStation::handleMessage(cMessage *msg) {
             delete msg;
         }
     } else {
-        // Messaggio esterno
         if (strcmp(msg->getName(), "Task") == 0) {
             cPacket *incomingPkt = dynamic_cast<cPacket *>(msg);
             if (!incomingPkt) {
@@ -92,7 +87,8 @@ void BaseStation::handleMessage(cMessage *msg) {
             } else {
                 handleNewTask(incomingPkt);
             }
-        } else if (strcmp(msg->getName(), "ForwardedPacket") == 0) {
+        } 
+        else if (strcmp(msg->getName(), "ForwardedPacket") == 0) {
             QueuePacket *queuePkt = dynamic_cast<QueuePacket *>(msg);
             if (!queuePkt) {
                 EV << "[ERROR] Incoming message is not a QueuePacket. Discarding.\n";
@@ -100,7 +96,8 @@ void BaseStation::handleMessage(cMessage *msg) {
             } else {
                 handleForwardedPacket(queuePkt);
             }
-        } else {
+        } 
+        else {
             EV << "[WARNING] Received unexpected message: " << msg->getName() << "\n";
             delete msg;
         }
@@ -108,9 +105,11 @@ void BaseStation::handleMessage(cMessage *msg) {
 }
 
 void BaseStation::handleProcessNextTaskMessage() {
-    if (taskQueue.size() > 0) {
+    if (!taskQueue.empty()) {
+        idle = false; 
         processNextTask();
     } else {
+        idle = true;
         EV << "[DEBUG] Queue is empty. No tasks to process.\n";
     }
 }
@@ -133,14 +132,15 @@ void BaseStation::processNextTask() {
     }
 
     simtime_t processingTime = (serviceRate > 0) ? length / serviceRate : 1.0;
-
     simtime_t responseTime = simTime() - nextPkt->getCreationTime();
     emit(responseTimeSignal_, responseTime);
-
     delete nextPkt;
 
-    if (taskQueue.size() > 0) { 
+    if (!taskQueue.empty()) {
         scheduleNextTaskProcessing(processingTime);
+    } else {
+        cMessage *processMsg = new cMessage("processNextTask");
+        scheduleAt(simTime() + processingTime, processMsg);
     }
 }
 
@@ -150,11 +150,11 @@ void BaseStation::scheduleNextTaskProcessing(simtime_t processingTime) {
 }
 
 void BaseStation::enqueueTask(QueuePacket* pkt) {
-    bool wasEmpty = taskQueue.size() == 0;
+    bool wasEmpty = (taskQueue.size() == 0);
     taskQueue.push(pkt);
-    emit(queueLengthSignal_, (double)taskQueue.size());
-    if (wasEmpty) {
-        // Se la coda era vuota, processa subito
+
+    if (wasEmpty && idle) {
+        idle = false;  
         double length = pkt->getByteLength();
         if (length <= 0) {
             EV << "[WARNING] Invalid packet length: " << length << ". Setting to 1 byte.\n";
@@ -163,6 +163,7 @@ void BaseStation::enqueueTask(QueuePacket* pkt) {
         simtime_t processingTime = (serviceRate > 0) ? length / serviceRate : 1.0;
         scheduleNextTaskProcessing(processingTime);
     } else {
+        emit(queueLengthSignal_, (double)taskQueue.size());
         EV << "[DEBUG] Task enqueued. Queue size: " << taskQueue.size() << "\n";
     }
 }
@@ -171,25 +172,20 @@ void BaseStation::handleNewTask(cPacket* incomingPkt) {
     EV << "[DEBUG] Received task. Packet name: " << incomingPkt->getName()
        << ", Packet length: " << incomingPkt->getByteLength() << "\n";
 
-    // Converti in QueuePacket
     QueuePacket *queuePkt = new QueuePacket("ForwardedPacket");
     queuePkt->setByteLength(incomingPkt->getByteLength());
     queuePkt->setCreationTime(simTime().dbl());
-
-    delete incomingPkt; // Elimina il cPacket originale
+    delete incomingPkt;
 
     if (locallyManaged) {
-        // Gestione locale
         if ((int)taskQueue.size() < queueSize) {
             enqueueTask(queuePkt);
         } else {
-            // Coda piena: scarta
             EV << "[DEBUG] Queue is full. Dropping task.\n";
             emit(droppedSignal_, 1.0);
             delete queuePkt;
         }
     } else {
-        // Non localmente gestito: controlliamo la base station meno carica
         cModule *bestBS = findBestBaseStation();
         int ourQueueLength = (int)taskQueue.size();
         int bestQueueLength = INT_MAX;
@@ -202,18 +198,16 @@ void BaseStation::handleNewTask(cPacket* incomingPkt) {
         }
 
         if (bestBS != nullptr && ourQueueLength > bestQueueLength) {
-            // Forwarda alla base station con coda minore
-            EV << "[DEBUG] Forwarding task: " << queuePkt->getName() << " to BaseStation: " 
-               << bestBS->getFullName() << " (ourQ=" << ourQueueLength << ", bestQ=" << bestQueueLength << ")\n";
+            EV << "[DEBUG] Forwarding task: " << queuePkt->getName() 
+               << " to BaseStation: " << bestBS->getFullName()
+               << " (ourQ=" << ourQueueLength << ", bestQ=" << bestQueueLength << ")\n";
             emit(forwardedSignal_, 1);
             sendDirect(queuePkt, delay, 0, bestBS, "in");
         } else {
-            // Gestiamo localmente (perchè non conviene forwardare)
             if (ourQueueLength < queueSize) {
                 EV << "[DEBUG] Managing task locally as our queue is not worse than best found.\n";
                 enqueueTask(queuePkt);
             } else {
-                // Coda piena: scarta
                 EV << "[DEBUG] Queue is full. Dropping task.\n";
                 emit(droppedSignal_, 1.0);
                 delete queuePkt;
@@ -234,7 +228,6 @@ void BaseStation::handleForwardedPacket(QueuePacket* queuePkt) {
 }
 
 cModule* BaseStation::findBestBaseStation() {
-    // Cerca la BaseStation con la coda più corta
     cModule *parent = getParentModule();
     if (!parent) {
         EV << "[ERROR] Parent module not found while searching for the best BaseStation.\n";
@@ -262,7 +255,6 @@ cModule* BaseStation::findBestBaseStation() {
 
         int qlen = bs->getQueueLength();
 
-        // Se troviamo una coda vuota, è la migliore possibile
         if (qlen == 0) {
             return mod;
         }
