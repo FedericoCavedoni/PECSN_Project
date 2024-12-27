@@ -8,6 +8,8 @@ docs/LaTeX/*.synctex*
 docs/LaTeX/*.toc
 docs/LaTeX/*.png
 docs/LaTeX/*.jpg
+docs/LaTeX/*.bbl
+docs/LaTeX/*.blg
 docs/LaTeX/cherubinFrontespizio*
 docs/Report.pdf
 EdgeComputing_Project/.settings/*
