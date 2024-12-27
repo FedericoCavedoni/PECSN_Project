@@ -6,6 +6,7 @@ docs/LaTeX/*.out
 docs/LaTeX/*.synctex*
 docs/LaTeX/*.toc
 docs/LaTeX/*.png
+docs/LaTeX/*.jpg
 docs/LaTeX/cherubinFrontespizio*
 docs/Report.pdf
 EdgeComputing_Project/.settings/*
