@@ -1,3 +1,4 @@
+.gitignore
 docs/LaTeX/*.aux
 docs/LaTeX/*.fdb*
 docs/LaTeX/*.fls
