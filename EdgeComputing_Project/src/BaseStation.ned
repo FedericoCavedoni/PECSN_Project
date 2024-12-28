@@ -13,7 +13,7 @@ simple BaseStation {
         @statistic[responseTime](source="responseTimeSignal"; record=mean,vector);
 
         @signal[queueLengthSignal];
-        @statistic[queueLength](source="queueLengthSignal"; record=mean,vector);
+        @statistic[queueLength](source="queueLengthSignal"; record=timeavg,vector);
 
         @signal[forwardedSignal];
         @statistic[forwarded](source="forwardedSignal"; record=count); 
