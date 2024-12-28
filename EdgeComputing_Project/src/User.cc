@@ -6,56 +6,54 @@
 Define_Module(User);
 
 void User::initialize() {
-    intervalRate = par("intervalRate").doubleValue();  
-    sizeRate = par("sizeRate").doubleValue();          
+    intervalRate = par("intervalRate").doubleValue();
+    sizeRate = par("sizeRate").doubleValue();
+
+    cModule *parent = getParentModule();
+    if (!parent) {
+        EV << "[ERROR] Parent module not found during initialization.\n";
+        endSimulation();
+        return;
+    }
+
+    int width = parent->par("width").intValue();
+    int height = parent->par("height").intValue();
+    if (width <= 0 || height <= 0) {
+        EV << "[ERROR] Invalid 'width' or 'height' for the simulation area.\n";
+        endSimulation();
+        return;
+    }
+
+    double mean = par("mean").doubleValue();
+    double std_dev = par("std_dev").doubleValue();
+    if (mean <= 0 || std_dev <= 0) {
+        EV << "[ERROR] Invalid 'mean' or 'std_dev' for lognormal distribution.\n";
+        endSimulation();
+        return;
+    }
 
     if (par("uniformDistribution").boolValue()) {
         // Distribuzione uniforme
-        cModule *parent = getParentModule();
-        if (!parent) {
-            EV << "[ERROR] Parent module not found during initialization.\n";
-            endSimulation();
-            return;
-        }
-
-        if (!parent->hasPar("width") || !parent->hasPar("height")) {
-            EV << "[ERROR] Parent module missing 'width' or 'height' parameters.\n";
-            endSimulation();
-            return;
-        }
-
-        int width = parent->par("width").intValue();  
-        int height = parent->par("height").intValue();  
-
         x = uniform(0, width, 0);
         y = uniform(0, height, 1);
 
         EV << "[DEBUG] User " << getIndex() << " positioned uniformly at (" << x << ", " << y << ")\n";
-    }
-    else {
-        double mean = par("mean").doubleValue();
-        double std_dev = par("std_dev").doubleValue();
-
-        if (mean <= 0 || std_dev <= 0) {
-            EV << "[ERROR] Invalid 'mean' or 'std_dev' for lognormal distribution.\n";
-            endSimulation();
-            return;
-        }
-
-        x = std::min(lognormal(mean, std_dev, 0), width);
-        y = std::min(lognormal(mean, std_dev, 1), height);
+    } else {
+        // Distribuzione lognormale
+        x = std::min(static_cast<int>(lognormal(mean, std_dev, 0)), width);
+        y = std::min(static_cast<int>(lognormal(mean, std_dev, 1)), height);
 
         EV << "[DEBUG] User " << getIndex() << " positioned lognormally at (" << x << ", " << y << ")\n";
     }
-
-    // Aggiorna la posizione nel display string
+    
     getDisplayString().setTagArg("p", 0, x);
     getDisplayString().setTagArg("p", 1, y);
 
     cMessage *sendEvent = new cMessage("sendEvent");
-    double taskInterval = exponential(1/intervalRate, 3);  
-    scheduleAt(simTime() + taskInterval, sendEvent);  
+    double taskInterval = exponential(1.0 / intervalRate, 3);
+    scheduleAt(simTime() + taskInterval, sendEvent);
 }
+
 
 void User::handleMessage(cMessage *msg) {
     if (strcmp(msg->getName(), "sendEvent") == 0) {
