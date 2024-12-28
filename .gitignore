@@ -30,4 +30,3 @@ EdgeComputing_Project/Makefile
 /scripts
 EdgeComputing_Project/src/run
 EdgeComputing_Project/src/EdgeComputing_Project.exe
-.gitignore
