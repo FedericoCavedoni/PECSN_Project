@@ -42,8 +42,8 @@ void User::initialize() {
             return;
         }
 
-        x = std::min(lognormal(mean, std_dev, 0), 100.0);
-        y = std::min(lognormal(mean, std_dev, 1), 100.0);
+        x = std::min(lognormal(mean, std_dev, 0), width);
+        y = std::min(lognormal(mean, std_dev, 1), height);
 
         EV << "[DEBUG] User " << getIndex() << " positioned lognormally at (" << x << ", " << y << ")\n";
     }
@@ -53,7 +53,7 @@ void User::initialize() {
     getDisplayString().setTagArg("p", 1, y);
 
     cMessage *sendEvent = new cMessage("sendEvent");
-    double taskInterval = exponential(intervalRate, 2);  
+    double taskInterval = exponential(1/intervalRate, 3);  
     scheduleAt(simTime() + taskInterval, sendEvent);  
 }
 
