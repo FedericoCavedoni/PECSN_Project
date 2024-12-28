@@ -8,7 +8,7 @@ N = (100, 250, 500) //FEDE P.
 Interval rate = (1/0.1, 1/1) //Uno estremo, un caso medio //FEDE C.
 Size rate = (10^4, 10^3) //Uno estremo, un caso medio //LORE
 
-Caso medio: N=250, I=1/1, S=10^3
+Caso medio: N=250, I=1/1, S=1/10^3
 
 
 PARAMETRI FISSI:
