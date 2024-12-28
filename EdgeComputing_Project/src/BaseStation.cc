@@ -142,7 +142,7 @@ void BaseStation::processNextTask() {
 
     simtime_t processingTime = (serviceRate > 0) ? length / serviceRate : 1.0;
     simtime_t responseTime = simTime() - activeTask->getCreationTime();
-    emit(responseTimeSignal_, responseTime);
+    emit(responseTimeSignal_, responseTime + processingTime);
 
     scheduleNextTaskProcessing(processingTime);    
 }
@@ -164,6 +164,9 @@ void BaseStation::enqueueTask(QueuePacket* pkt) {
             length = 1.0;
         }
         simtime_t processingTime = (serviceRate > 0) ? length / serviceRate : 1.0;
+        simtime_t responseTime = simTime() - activeTask->getCreationTime();
+        emit(responseTimeSignal_, responseTime + processingTime);
+
         scheduleNextTaskProcessing(processingTime);
     } else {
         taskQueue.push(pkt);
