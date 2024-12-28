@@ -10,6 +10,8 @@ BaseStation::~BaseStation() {
         taskQueue.pop();
         delete pkt;
     }
+    delete activeTask;
+    activeTask = nullptr;
 }
 
 void BaseStation::initialize() {
@@ -17,6 +19,7 @@ void BaseStation::initialize() {
     delay = par("delay").doubleValue();
     queueSize = par("queueSize").intValue();
     locallyManaged = par("locallyManaged").boolValue();
+    activeTask = nullptr;
 
     responseTimeSignal_ = registerSignal("responseTimeSignal");
     queueLengthSignal_ = registerSignal("queueLengthSignal");
@@ -109,39 +112,39 @@ void BaseStation::handleProcessNextTaskMessage() {
         idle = false; 
         processNextTask();
     } else {
+        delete activeTask;
+        activeTask = nullptr;
         idle = true;
         EV << "[DEBUG] Queue is empty. No tasks to process.\n";
     }
 }
 
 void BaseStation::processNextTask() {
-    QueuePacket *nextPkt = taskQueue.front();
+    if(activeTask){
+        delete activeTask;
+        activeTask = nullptr;
+    }
+    activeTask = taskQueue.front();
     taskQueue.pop();
     emit(queueLengthSignal_, (double)taskQueue.size());
     EV << "[DEBUG] Task dequeued. Queue size: " << taskQueue.size() << "\n";
 
-    if (!nextPkt) {
-        EV << "[ERROR] nextPkt is nullptr. Skipping processing.\n";
+    if (!activeTask) {
+        EV << "[ERROR] activeTask is nullptr. Skipping processing.\n";
         return;
     }
 
-    double length = nextPkt->getByteLength();
+    double length = activeTask->getByteLength();
     if (length <= 0) {
         EV << "[WARNING] Invalid packet length: " << length << ". Setting to default (1 byte).\n";
         length = 1.0;
     }
 
     simtime_t processingTime = (serviceRate > 0) ? length / serviceRate : 1.0;
-    simtime_t responseTime = simTime() - nextPkt->getCreationTime();
+    simtime_t responseTime = simTime() - activeTask->getCreationTime();
     emit(responseTimeSignal_, responseTime);
-    delete nextPkt;
 
-    if (!taskQueue.empty()) {
-        scheduleNextTaskProcessing(processingTime);
-    } else {
-        cMessage *processMsg = new cMessage("processNextTask");
-        scheduleAt(simTime() + processingTime, processMsg);
-    }
+    scheduleNextTaskProcessing(processingTime);    
 }
 
 void BaseStation::scheduleNextTaskProcessing(simtime_t processingTime) {
@@ -151,9 +154,9 @@ void BaseStation::scheduleNextTaskProcessing(simtime_t processingTime) {
 
 void BaseStation::enqueueTask(QueuePacket* pkt) {
     bool wasEmpty = (taskQueue.size() == 0);
-    taskQueue.push(pkt);
 
     if (wasEmpty && idle) {
+        activeTask = pkt;
         idle = false;  
         double length = pkt->getByteLength();
         if (length <= 0) {
@@ -163,6 +166,7 @@ void BaseStation::enqueueTask(QueuePacket* pkt) {
         simtime_t processingTime = (serviceRate > 0) ? length / serviceRate : 1.0;
         scheduleNextTaskProcessing(processingTime);
     } else {
+        taskQueue.push(pkt);
         emit(queueLengthSignal_, (double)taskQueue.size());
         EV << "[DEBUG] Task enqueued. Queue size: " << taskQueue.size() << "\n";
     }

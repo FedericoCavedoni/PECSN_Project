@@ -15,6 +15,7 @@ private:
     bool locallyManaged;
     int queueSize;
     std::queue<QueuePacket*> taskQueue;
+    QueuePacket* activeTask;
 
     bool idle;
 
