@@ -4,8 +4,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def load_data(json_path):
-    with open(json_path, 'r', encoding='utf-8') as f:
-        return json.load(f)
+    try:
+        with open(json_path, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except json.JSONDecodeError as e:
+        print(f"Errore nel parsing del file JSON: {e}")
+        raise
 
 def extract_statistics(data, subsample_rate=None, subsample_number=None):
     scalars = defaultdict(lambda: defaultdict(list))
@@ -55,7 +59,7 @@ def compute_averages(scalars, key):
                 averages[module] = None
     return averages
 
-def compute_mean_time_series(vectors, key):
+def compute_mean_time_series(vectors, key, convert_to_ms=False):
     mean_series = {}
     for module, metrics in vectors.items():
         if key in metrics:
@@ -71,7 +75,10 @@ def compute_mean_time_series(vectors, key):
             for t in all_times:
                 if time_to_values[t]:
                     mean_times.append(t)
-                    mean_values.append(np.mean(time_to_values[t]))
+                    mean_value = np.mean(time_to_values[t])
+                    if convert_to_ms:
+                        mean_value *= 1000  # Convert value to milliseconds
+                    mean_values.append(mean_value)
             mean_series[module] = (mean_times, mean_values)
     return mean_series
 
@@ -202,7 +209,7 @@ def load_and_prepare_data(json_path, subsample_rate=None, subsample_number=None)
         print(f"{module}: {avg:.2f}" if avg is not None else f"{module}: None")
 
     mean_queue_length = compute_mean_time_series(vectors, "queueLength:vector")
-    mean_response_time = compute_mean_time_series(vectors, "responseTime:vector")
+    mean_response_time = compute_mean_time_series(vectors, "responseTime:vector", convert_to_ms=True)
 
     return mean_queue_length, mean_response_time
 
@@ -217,7 +224,7 @@ def plot_each_basestation(mean_queue_length, mean_response_time, queue_y_limits=
     plot_mean_time_series(
         mean_response_time,
         "Average Response Time",
-        "Response Time (s)",
+        "Response Time (ms)",
         y_limits=response_y_limits,
         x_limit=x_limit
     )
@@ -239,7 +246,7 @@ def plot_global_average(mean_queue_length, mean_response_time, queue_y_limits=No
     )
 
 if __name__ == "__main__":
-    file_name = "Uniform_A_N250_I1_S1e3"
+    file_name = "Uniform_A_N250_I05_S1e3"
     JSON_INPUT_FILE = f"data/{file_name}.json"
 
     SUBSAMPLE_NUMBER = 100
@@ -255,7 +262,6 @@ if __name__ == "__main__":
         subsample_number=SUBSAMPLE_NUMBER
     )
 
-    # Plot each basestation
     plot_each_basestation(
         mean_queue_length,
         mean_response_time,
@@ -264,7 +270,6 @@ if __name__ == "__main__":
         x_limit=X_LIMIT
     )
 
-    # Plot global average
     plot_global_average(
         mean_queue_length,
         mean_response_time,
