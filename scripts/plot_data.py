@@ -56,6 +56,13 @@ def compute_averages(scalars, key):
             averages[module] = np.mean(valid_values) if valid_values else 0
     return averages
 
+def compute_totals(scalars, key):
+    total = 0
+    for module, metrics in scalars.items():
+        if key in metrics:
+            total += sum([v if v is not None else 0 for v in metrics[key]])
+    return total
+
 def compute_mean_time_series(vectors, key, convert_to_ms=False):
     mean_series = {}
     for module, metrics in vectors.items():
@@ -189,21 +196,28 @@ def load_and_prepare_data(json_path, subsample_rate=None, subsample_number=None)
     avg_queue = compute_averages(scalars, "queueLength:timeavg")
     avg_response = compute_averages(scalars, "responseTime:mean")
 
+    total_dropped = compute_totals(scalars, "dropped:count")
+    total_forwarded = compute_totals(scalars, "forwarded:count")
+
     print("=== Average Dropped Packets per Basestation (SCALAR) ===")
     for module, avg in avg_dropped.items():
-        print(f"{module}: {avg:.2f}" if avg is not None else f"{module}: None")
+        print(f"{module}: {avg:.2f}")
+
+    print(f"\nTotal Dropped Packets: {total_dropped}")
 
     print("\n=== Average Forwarded Packets per Basestation (SCALAR) ===")
     for module, avg in avg_forwarded.items():
-        print(f"{module}: {avg:.2f}" if avg is not None else f"{module}: None")
+        print(f"{module}: {avg:.2f}")
+
+    print(f"\nTotal Forwarded Packets: {total_forwarded}")
 
     print("\n=== Average Queue Length per Basestation (SCALAR) ===")
     for module, avg in avg_queue.items():
-        print(f"{module}: {avg:.2f}" if avg is not None else f"{module}: None")
+        print(f"{module}: {avg:.2f}")
 
     print("\n=== Average Response Time per Basestation (SCALAR) ===")
     for module, avg in avg_response.items():
-        print(f"{module}: {avg:.2f}" if avg is not None else f"{module}: None")
+        print(f"{module}: {avg:.2f}")
 
     mean_queue_length = compute_mean_time_series(vectors, "queueLength:vector")
     mean_response_time = compute_mean_time_series(vectors, "responseTime:vector", convert_to_ms=True)
@@ -243,7 +257,7 @@ def plot_global_average(mean_queue_length, mean_response_time, queue_y_limits=No
     )
 
 if __name__ == "__main__":
-    file_name = "Lognormal_B_N250_I1_S1e3"
+    file_name = "Lognormal_B_N250_I05_S1e3"
     JSON_INPUT_FILE = f"data/{file_name}.json"
 
     SUBSAMPLE_NUMBER = 100
@@ -267,6 +281,7 @@ if __name__ == "__main__":
         x_limit=X_LIMIT
     )
 
+    """
     plot_global_average(
         mean_queue_length,
         mean_response_time,
@@ -274,3 +289,4 @@ if __name__ == "__main__":
         response_y_limits=RESPONSE_Y_LIMITS,
         x_limit=X_LIMIT
     )
+    """
