@@ -5,7 +5,7 @@
 Define_Module(BaseStation);
 
 BaseStation::~BaseStation() {
-    while (!taskQueue.empty()) {
+    while (taskQueue.size() > 0) {
         QueuePacket *pkt = taskQueue.front();
         taskQueue.pop();
         delete pkt;
@@ -108,7 +108,7 @@ void BaseStation::handleMessage(cMessage *msg) {
 }
 
 void BaseStation::handleProcessNextTaskMessage() {
-    if (!taskQueue.empty()) {
+    if (taskQueue.size() > 0) {
         idle = false; 
         processNextTask();
     } else {
@@ -153,9 +153,9 @@ void BaseStation::scheduleNextTaskProcessing(simtime_t processingTime) {
 }
 
 void BaseStation::enqueueTask(QueuePacket* pkt) {
-    bool wasEmpty = (taskQueue.size() == 0);
+    bool isEmpty = (taskQueue.size() == 0);
 
-    if (wasEmpty && idle) {
+    if (isEmpty && idle) {
         activeTask = pkt;
         idle = false;  
         double length = pkt->getByteLength();

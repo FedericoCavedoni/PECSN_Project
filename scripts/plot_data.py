@@ -242,8 +242,8 @@ if __name__ == "__main__":
     file_name = "Uniform_A_N250_I1_S1e3"
     JSON_INPUT_FILE = f"data/{file_name}.json"
 
-    SUBSAMPLE_NUMBER = None
-    SUBSAMPLE_RATE = 99
+    SUBSAMPLE_NUMBER = 100
+    SUBSAMPLE_RATE = 90
 
     QUEUE_Y_LIMITS = None
     RESPONSE_Y_LIMITS = None
