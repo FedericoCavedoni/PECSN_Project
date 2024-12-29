@@ -19,7 +19,7 @@ def extract_statistics(data, subsample_rate=None, subsample_number=None):
         for scalar in run_content.get("scalars", []):
             module = scalar.get("module", "")
             name = scalar.get("name", "")
-            value = scalar.get("value", 0)
+            value = scalar.get("value", 0) if scalar.get("value") is not None else 0  
             scalars[module][name].append(value)
 
         for vector in run_content.get("vectors", []):
@@ -52,11 +52,8 @@ def compute_averages(scalars, key):
     averages = {}
     for module, metrics in scalars.items():
         if key in metrics:
-            valid_values = [v for v in metrics[key] if v is not None]
-            if valid_values:
-                averages[module] = np.mean(valid_values)
-            else:
-                averages[module] = None
+            valid_values = [v if v is not None else 0 for v in metrics[key]]  
+            averages[module] = np.mean(valid_values) if valid_values else 0
     return averages
 
 def compute_mean_time_series(vectors, key, convert_to_ms=False):
@@ -246,7 +243,7 @@ def plot_global_average(mean_queue_length, mean_response_time, queue_y_limits=No
     )
 
 if __name__ == "__main__":
-    file_name = "Uniform_A_N250_I05_S1e3"
+    file_name = "Lognormal_B_N250_I1_S1e3"
     JSON_INPUT_FILE = f"data/{file_name}.json"
 
     SUBSAMPLE_NUMBER = 100
