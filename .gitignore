@@ -21,13 +21,9 @@ EdgeComputing_Project/src/EdgeComputing_Project_dbg.exe
 EdgeComputing_Project/src/package.ned
 EdgeComputing_Project/src/QueuePacket_m.*
 EdgeComputing_Project/src/QueuePacket.*
-EdgeComputing_Project/.cproject
-EdgeComputing_Project/.nedexclusions
-EdgeComputing_Project/.nedfolders
-EdgeComputing_Project/.oppbuildspec
-EdgeComputing_Project/.project
 EdgeComputing_Project/Makefile
 /scripts/data/
 EdgeComputing_Project/src/run
 EdgeComputing_Project/src/EdgeComputing_Project.exe
 /scripts/venv
+/scripts/__pycache__
