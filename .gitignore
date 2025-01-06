@@ -1,3 +1,4 @@
+.gitignore
 docs/LaTeX/*.aux
 docs/LaTeX/*.fdb*
 docs/LaTeX/*.fls
@@ -19,7 +20,12 @@ EdgeComputing_Project/out/*
 /EdgeComputing_Project/simulations/results
 EdgeComputing_Project/simulations/Lognormal.anf
 EdgeComputing_Project/simulations/Uniform.anf
-/.metadata
+/.metadata/
+EdgeComputing_Project/.cproject
+EdgeComputing_Project/simulations/.qtenvrc
+EdgeComputing_Project/simulations/run
+EdgeComputing_Project/src/EdgeComputing_Project.exe
+EdgeComputing_Project/src/EdgeComputing_Project_dbg.exe
+EdgeComputing_Project/src/QueuePacket_m.cc
+EdgeComputing_Project/src/QueuePacket_m.h
 EdgeComputing_Project/simulations/General.anf
-EdgeComputing_Project/simulations/omnetpp.ini
-.gitignore

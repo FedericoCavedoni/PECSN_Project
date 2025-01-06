@@ -1,63 +1,40 @@
 from data_extraction import *
 from data_plot import *
 
-
-if __name__ == "__main__":
-    file_name = "Lognormal_A_N250_I05_S1e3"
+def plot_graph(file_name, SUBSAMPLE_NUMBER, SUBSAMPLE_RATE, QUEUE_Y_LIMITS, RESPONSE_Y_LIMITS, X_LIMIT):
     JSON_INPUT_FILE = f"data/{file_name}.json"
-    SUBSAMPLE_NUMBER = 100
-    SUBSAMPLE_RATE = 90
-    QUEUE_Y_LIMITS = None
-    RESPONSE_Y_LIMITS = None
-    X_LIMIT = None
+    
+    params = parse_filename(JSON_INPUT_FILE)
+    opz = params["opzione"] 
 
     # Caricamento e preparazione dati
     data = load_data(JSON_INPUT_FILE)
     scalars, vectors = extract_statistics(data, SUBSAMPLE_RATE, SUBSAMPLE_NUMBER)
+    
+    # Stampa di TUTTE le statistiche richieste
+    print_all_statistics(scalars, vectors)
 
-    # Calcolo statistiche
+    # Calcolo statistiche (medie temporali) per i plot
     mean_queue_length = compute_mean_time_series(vectors, "queueLength:vector")
     mean_response_time = compute_mean_time_series(vectors, "responseTime:vector", convert_to_ms=True)
 
-    # Plot delle medie temporali con CI
-    plot_mean_time_series_with_ci(
-        mean_queue_length,
-        {},
-        "Average Queue Length with CI",
-        "Queue Length",
-        y_limits=QUEUE_Y_LIMITS,
-        x_limit=X_LIMIT,
-    )
+    # Plot dei grafici di time series
+    plot_timeseries(mean_queue_length, mean_response_time,QUEUE_Y_LIMITS=QUEUE_Y_LIMITS,RESPONSE_Y_LIMITS=RESPONSE_Y_LIMITS,X_LIMIT=X_LIMIT)
 
-    plot_mean_time_series_with_ci(
-        mean_response_time,
-        {},
-        "Average Response Time with CI",
-        "Response Time (ms)",
-        y_limits=RESPONSE_Y_LIMITS,
-        x_limit=X_LIMIT,
-    )
+    # Plot dei boxplot
+    plot_boxplots(vectors, scalars, opz)
+    
+    # Plot delle timeseries aggregate
+    # plot_aggregated_response_time_and_queue_length(vectors,y_limits_queue=QUEUE_Y_LIMITS,y_limits_resp=RESPONSE_Y_LIMITS,x_limit=X_LIMIT)
 
-    # Box Plot per response time
-    plot_boxplot_from_vectors(
-        vectors,
-        "responseTime:vector",
-        "Response Time Distribution by Basestation",
-        "Response Time (ms)"
-    )
-
-    # Box Plot per forwarded packets
-    plot_boxplot_from_scalars(
-        scalars,
-        "forwarded:count",
-        "Forwarded Packets Distribution by Basestation",
-        "Number of Forwarded Packets"
-    )
-
-    # Box Plot per dropped packets
-    plot_boxplot_from_scalars(
-        scalars,
-        "dropped:count",
-        "Dropped Packets Distribution by Basestation",
-        "Number of Dropped Packets"
-    )
+if __name__ == "__main__":
+    file_name = "Lognormal_B_N250_I05_S1e3"
+    
+    SUBSAMPLE_NUMBER = 100
+    SUBSAMPLE_RATE = 90
+    
+    QUEUE_Y_LIMITS = (0,60)
+    RESPONSE_Y_LIMITS = (0,300)
+    X_LIMIT = (100, 900)
+    
+    plot_graph(file_name, SUBSAMPLE_NUMBER, SUBSAMPLE_RATE, QUEUE_Y_LIMITS, RESPONSE_Y_LIMITS, X_LIMIT)
