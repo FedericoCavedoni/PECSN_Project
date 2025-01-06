@@ -1,4 +1,3 @@
-.gitignore
 docs/LaTeX/*.aux
 docs/LaTeX/*.fdb*
 docs/LaTeX/*.fls
@@ -20,3 +19,7 @@ EdgeComputing_Project/out/*
 /EdgeComputing_Project/simulations/results
 EdgeComputing_Project/simulations/Lognormal.anf
 EdgeComputing_Project/simulations/Uniform.anf
+/.metadata
+EdgeComputing_Project/simulations/General.anf
+EdgeComputing_Project/simulations/omnetpp.ini
+.gitignore
