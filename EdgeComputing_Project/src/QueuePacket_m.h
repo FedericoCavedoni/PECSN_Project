@@ -1,5 +1,5 @@
 //
-// Generated file, do not edit! Created by opp_msgtool 6.0 from QueuePacket.msg.
+// Generated file, do not edit! Created by opp_msgtool 6.0 from src/QueuePacket.msg.
 //
 
 #ifndef __QUEUEPACKET_M_H
@@ -18,7 +18,7 @@
 
 class QueuePacket;
 /**
- * Class generated from <tt>QueuePacket.msg:1</tt> by opp_msgtool.
+ * Class generated from <tt>src/QueuePacket.msg:1</tt> by opp_msgtool.
  * <pre>
  * packet QueuePacket extends cPacket
  * {
