@@ -134,14 +134,14 @@ def parse_filename(filename):
 
     size_str = parts[4][1:]
     try:
-        packet_size = float(size_str)
+        size_rate = float(size_str)
     except ValueError:
-        packet_size = size_str
+        size_rate = size_str
 
     return {
         "distribution": distribution,
         "opzione": opzione,
         "n_users": n_users,
         "interarrival": interarrival,
-        "packet_size": packet_size
+        "size_rate": size_rate
     }

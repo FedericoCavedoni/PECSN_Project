@@ -65,9 +65,11 @@ def plot_graph(file_list,SUBSAMPLE_NUMBER, SUBSAMPLE_RATE, QUEUE_Y_LIMITS, RESPO
         dist = params["distribution"]
         opz = params["opzione"]
         iat = params["interarrival"]
+        num_user = params["n_users"]
+        size_rate = params["size_rate"]
         
 
-        label_str = f"{dist}, Option {opz}, λ={iat}"
+        label_str = f"{dist}, Option {opz}, λ={iat}, N={num_user}, S={size_rate}"
 
         file_name = f"data/{json_file}"
         data = load_data(file_name)
@@ -154,7 +156,7 @@ if __name__ == "__main__":
         "Lognormal_B_N250_I05_S1e3.json",
     ]
 
-    SUBSAMPLE_NUMBER = 100
+    SUBSAMPLE_NUMBER = None # 100
     SUBSAMPLE_RATE = 90
     QUEUE_Y_LIMITS = (0, 60)
     RESPONSE_Y_LIMITS = (0, 200)
