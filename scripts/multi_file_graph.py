@@ -156,7 +156,7 @@ if __name__ == "__main__":
         "Lognormal_B_N250_I05_S1e3.json",
     ]
 
-    SUBSAMPLE_NUMBER = None # 100
+    SUBSAMPLE_NUMBER = 100
     SUBSAMPLE_RATE = 90
     QUEUE_Y_LIMITS = (0, 60)
     RESPONSE_Y_LIMITS = (0, 200)
