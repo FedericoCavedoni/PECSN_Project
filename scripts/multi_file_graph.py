@@ -1,9 +1,10 @@
 import os
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
 from data_extraction import *
 
-def aggregate_mean_time_series_fast(vectors, key, convert_to_ms=False):
+def aggregate_mean_time_series(vectors, key, convert_to_ms=False):
     valid_modules = []
     all_times_list = []
     for module, metric_dict in vectors.items():
@@ -50,7 +51,19 @@ def aggregate_mean_time_series_fast(vectors, key, convert_to_ms=False):
 
     return all_times, mean_values
 
-def plot_graph(file_list,SUBSAMPLE_NUMBER, SUBSAMPLE_RATE, QUEUE_Y_LIMITS, RESPONSE_Y_LIMITS, X_LIMIT):
+
+def plot_graph(file_list,
+               SUBSAMPLE_NUMBER,
+               SUBSAMPLE_RATE,
+               QUEUE_Y_LIMITS,
+               RESPONSE_Y_LIMITS,
+               X_LIMIT,
+               boxplot_whiskers=None):
+
+    if boxplot_whiskers is None:
+        whiskers = 1.5
+    else:
+        whiskers = list(boxplot_whiskers)
 
     all_times_rt = []
     all_values_rt = []
@@ -60,6 +73,10 @@ def plot_graph(file_list,SUBSAMPLE_NUMBER, SUBSAMPLE_RATE, QUEUE_Y_LIMITS, RESPO
     all_values_ql = []
     all_labels_ql = []
 
+    boxplot_data_rt = []
+    boxplot_data_ql = []
+    boxplot_labels = []
+
     for json_file in file_list:
         params = parse_filename(json_file)
         dist = params["distribution"]
@@ -68,7 +85,6 @@ def plot_graph(file_list,SUBSAMPLE_NUMBER, SUBSAMPLE_RATE, QUEUE_Y_LIMITS, RESPO
         num_user = params["n_users"]
         size_rate = params["size_rate"]
         
-
         label_str = f"{dist}, Option {opz}, λ={iat}, N={num_user}, S={size_rate}"
 
         file_name = f"data/{json_file}"
@@ -79,10 +95,10 @@ def plot_graph(file_list,SUBSAMPLE_NUMBER, SUBSAMPLE_RATE, QUEUE_Y_LIMITS, RESPO
             subsample_number=SUBSAMPLE_NUMBER
         )
 
-        rt_times, rt_values = aggregate_mean_time_series_fast(
+        rt_times, rt_values = aggregate_mean_time_series(
             vectors, "responseTime:vector", convert_to_ms=True
         )
-        ql_times, ql_values = aggregate_mean_time_series_fast(
+        ql_times, ql_values = aggregate_mean_time_series(
             vectors, "queueLength:vector", convert_to_ms=False
         )
 
@@ -104,6 +120,10 @@ def plot_graph(file_list,SUBSAMPLE_NUMBER, SUBSAMPLE_RATE, QUEUE_Y_LIMITS, RESPO
         all_times_ql.append(ql_times)
         all_values_ql.append(ql_values)
         all_labels_ql.append(label_str)
+
+        boxplot_data_rt.append(rt_values)
+        boxplot_data_ql.append(ql_values)
+        boxplot_labels.append(label_str)
 
     plt.figure(figsize=(10, 6))
     for times, vals, label in zip(all_times_rt, all_values_rt, all_labels_rt):
@@ -143,8 +163,46 @@ def plot_graph(file_list,SUBSAMPLE_NUMBER, SUBSAMPLE_RATE, QUEUE_Y_LIMITS, RESPO
     plt.tight_layout()
     plt.show()
 
+    colors_rt = plt.cm.tab10(np.linspace(0, 1, len(boxplot_data_rt)))
+    plt.figure(figsize=(10, 6))
+    bp_rt = plt.boxplot(
+        boxplot_data_rt,
+        whis=whiskers,
+        patch_artist=True
+    )
+    for patch, color in zip(bp_rt['boxes'], colors_rt):
+        patch.set_facecolor(color)
+    handles_rt = []
+    for color, label in zip(colors_rt, boxplot_labels):
+        handles_rt.append(mpatches.Patch(color=color, label=label))
+    plt.legend(handles=handles_rt)
+    plt.title("Boxplot Response Time (ms)")
+    plt.ylabel("Response Time (ms)")
+    plt.grid(True, linestyle="--", alpha=0.7)
+    plt.tight_layout()
+    plt.show()
+
+    colors_ql = plt.cm.tab10(np.linspace(0, 1, len(boxplot_data_ql)))
+    plt.figure(figsize=(10, 6))
+    bp_ql = plt.boxplot(
+        boxplot_data_ql,
+        whis=whiskers,
+        patch_artist=True
+    )
+    for patch, color in zip(bp_ql['boxes'], colors_ql):
+        patch.set_facecolor(color)
+    handles_ql = []
+    for color, label in zip(colors_ql, boxplot_labels):
+        handles_ql.append(mpatches.Patch(color=color, label=label))
+    plt.legend(handles=handles_ql)
+    plt.title("Boxplot Queue Length")
+    plt.ylabel("Queue Length")
+    plt.grid(True, linestyle="--", alpha=0.7)
+    plt.tight_layout()
+    plt.show()
+
+
 if __name__ == "__main__":
-    
     file_list = [
         #"Uniform_A_N250_I01_S1e3.json",
         #"Uniform_A_N250_I05_S1e3.json",
@@ -161,5 +219,16 @@ if __name__ == "__main__":
     QUEUE_Y_LIMITS = (0, 60)
     RESPONSE_Y_LIMITS = (0, 200)
     X_LIMIT = (100, 900)
-    
-    plot_graph(file_list,SUBSAMPLE_NUMBER, SUBSAMPLE_RATE, QUEUE_Y_LIMITS, RESPONSE_Y_LIMITS, X_LIMIT)
+
+    boxplot_whiskers = None
+    # boxplot_whiskers = (5, 95)
+
+    plot_graph(
+        file_list,
+        SUBSAMPLE_NUMBER,
+        SUBSAMPLE_RATE,
+        QUEUE_Y_LIMITS,
+        RESPONSE_Y_LIMITS,
+        X_LIMIT,
+        boxplot_whiskers=boxplot_whiskers
+    )
