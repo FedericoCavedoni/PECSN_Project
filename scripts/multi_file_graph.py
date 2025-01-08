@@ -217,8 +217,8 @@ if __name__ == "__main__":
     SUBSAMPLE_NUMBER = 100
     SUBSAMPLE_RATE = 90
     QUEUE_Y_LIMITS = (0, 60)
-    RESPONSE_Y_LIMITS = (0, 200)
-    X_LIMIT = (100, 900)
+    RESPONSE_Y_LIMITS = (0, 300)
+    X_LIMIT = (0, 500)
 
     boxplot_whiskers = None
     # boxplot_whiskers = (5, 95)

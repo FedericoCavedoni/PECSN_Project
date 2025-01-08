@@ -14,7 +14,7 @@ def plot_mean_time_series(mean_series, title, ylabel, y_limits=None, x_limit=Non
         if x_limit:
             times, values = zip(*[(t, v) for t, v in zip(times, values) if x_limit[0] <= t <= x_limit[1]])
         plt.plot(times, values, label=module)
-    plt.axhline(global_mean, color='red', linestyle='--', label=f"Global Mean = {global_mean:.2f}")
+    #plt.axhline(global_mean, color='red', linestyle='--', label=f"Global Mean = {global_mean:.2f}")
     plt.title(title)
     plt.xlabel("Time (s)")
     plt.ylabel(ylabel)
@@ -61,6 +61,9 @@ def plot_boxplot_from_vectors(vectors, key, title, ylabel, convert_to_ms=False, 
         legend_patches = [mpatches.Patch(color=colors[i], label=labels[i]) for i in range(len(labels))]
         plt.legend(handles=legend_patches, title="Basestations", loc="upper right", bbox_to_anchor=(1.2, 1))
         plt.tight_layout()
+        
+        #plt.ylim(0, 800)
+
         if save_path:
             plt.savefig(save_path)
         else:
