@@ -116,7 +116,7 @@ The analysis presented in this report provides insights into the trade-offs and 
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{img/immagine.png}
-    \caption{Scheme}
+    \caption{System modeling scheme.}
     \label{scheme}
 \end{figure}
 
@@ -312,33 +312,84 @@ In this chapter, we discuss how the factors and parameters have been chosen thro
 \section{Factors Calibration}
 The objective of this section is to specify the intervals of the key factors in order to correctly reproduce realistic conditions in our system.
 
-\subsection{Number of base stations}
-This number depends on where is the area located geographically and on it's dimentions.
-In suburban areas, are commonly spaced 2/3 km apart and in dense urban areas, they may be as close as 400/800 m apart\footnote{Source: \href{https://en.wikipedia.org/wiki/Cell_site}{Wikipedia}}.
+\subsection{Fixed Factors}
+The following factors remain constant throughout our experiments:
 
-\subsection{Number of users per base station}
-This number changes in the range $[10, 50]$ depending on how much an area is effectively crowded.\footnote{Reference: \href{https://ieeexplore.ieee.org/document/8305375}{Propagation channel Characterization for 28 and 73 GHz Millimeter-Wave 5G Frequency Band}}
+\begin{itemize}
+    \item \textbf{Number of base stations (M)}: 9
+    %
+    \item \textbf{Dimensions of the area}: height = 1800\,m, width = 1800\,m
+    %
+    \item \textbf{Service rate}: $10^5$ (packets/second)
+    %
+    \item \textbf{Delay}: 50\,ms
+    %
+    \item \textbf{Queue size}: 50
+    %
+    \item \textbf{Distribution parameters}:
+    \begin{itemize}
+        \item Mean: $\log \left(\frac{1800}{2}\right)$
+        \item Standard Deviation: 0.4
+    \end{itemize}
+\end{itemize}
+The number of base stations ($M = 9$) aims to reflect a moderately sized area with multiple sites, balancing suburban and urban deployments. The dimensions of the area ($1800\,m \times 1800\,m$) were chosen to represent a typical environment where base stations are neither too sparse nor too dense. The service rate of $10^5$ packets/second, along with a 50\,ms delay and a queue size of 50, is used to simulate a realistic cellular-network-like environment where moderate buffering and short delays are expected. Finally, the log-normal distribution (characterized by the specified mean and standard deviation) models the spatial distribution of users. This distribution is particularly suitable for analyzing cases where user concentration is uneven across the area, such as in scenarios with hotspots and sparse regions.
+
+\subsection{Varying Factors}
+The following factors vary to represent different scenarios and test system performance under varying conditions:
+
+\begin{itemize}
+    \item \textbf{Number of users ($N$)}:
+    \begin{itemize}
+        \item \boldmath{$N = 100$}: Represents a lightly loaded scenario, simulating a low-density environment with fewer active users.
+        \item \boldmath{$N = 250$}: A moderately loaded scenario, reflecting a typical environment with a balanced user density.
+        \item \boldmath{$N = 500$}: A heavily loaded scenario, used to evaluate system performance under high user density and demand.
+    \end{itemize}
+    %
+    \item \textbf{Interval rate}: This parameter determines how frequently users generate requests (i.e., the arrival rate). We consider two scenarios:
+    \begin{itemize}
+        \item \textbf{Medium-case scenario}: \boldmath{$1 / 0.5$}, representing a moderate traffic load with steady user activity.
+        \item \textbf{Extreme-case scenario}: \boldmath{$1 / 0.1$}, emulating peak traffic conditions with frequent user requests.
+    \end{itemize}
+    %
+    \item \textbf{Size rate}:
+    \begin{itemize}
+        \item \textbf{Medium-case scenario}: \boldmath{$10^3$}: Corresponds to smaller data packet sizes, typical of lightweight applications or systems with low bandwidth requirements.
+        \item \textbf{Extreme-case scenario}: \boldmath{$10^4$}: Represents larger data packet sizes, increasing system load and reflecting heavier traffic conditions.
+    \end{itemize}
+\end{itemize}
+The combination of these parameters enables us to evaluate the system under a broad range of realistic conditions, from moderate loads with fewer users and smaller data sizes to extreme loads with higher user counts, larger data sizes, and higher arrival rates. These variations ensure that the analysis is comprehensive and captures critical performance metrics under both typical and challenging conditions.
+
+\section{Warmup Time Analysis}
+Warmup time refers to the period during which the system transitions from an initial transient state to a steady state. Properly setting the warmup time ensures that the system's performance metrics are evaluated only during the steady-state period, avoiding bias caused by the initial transient.\\\\
+In our analysis, we observed the response time as a function of time. As shown in Figure~\ref{fig:warmup_time}, the response time stabilizes and reaches a steady state within 100 seconds. The transient period, characterized by larger variations in response time, does not exceed 100 seconds across all experiments.\\\\
+Based on these observations, the warmup time is empirically set to 100 seconds. This ensures that any data collected during the transient state is excluded from the analysis, leading to more accurate and reliable results.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=1\textwidth]{img/warmup_analysis.png}
+    \caption{Response time as a function of time. The transient period does not exceed 100 seconds, indicating the warmup time.}
+    \label{fig:warmup_time}
+\end{figure}
 
 \chapter{Simulation Experiments}
 \section{The effect of forwarding packets on the system}
-We test our system in both cases A and B to see the effects of forwarding packets wether the packets are generated acording to a uniform distribution or a lognormal distribution.
-
+We test our system in both cases A and B to see the effects of forwarding packets wether the packets are generated acording to a uniform distribution or a lognormal distribution.\\\\
 The tests also take into account 3 factors:
 \begin{itemize}
     \item \textbf{N}: (100, 250, 500)
     \item \textbf{Interarrival rate}: ($\frac{1}{0.1}$, $\frac{1}{0.5}$)
-    \item \textbf{Size rate}: ($10^3,\ 10^4$)
+    \item \textbf{Size rate}: ($\frac{1}{10^3}$, $\frac{1}{10^4}$)
 \end{itemize}
 
 Considering the average case as a reference:
 \begin{itemize}
     \item $N=250$
     \item $I=\frac{1}{0.5}$
-    \item $S=10^3$
+    \item $S=\frac{1}{10^3}$
 \end{itemize}
 
 \subsection{Size rate variation - Method A}
-\subsubsection*{Case $S=10^3$}
+\subsubsection*{Case $S=\frac{1}{10^3}$}
 
 \begin{figure}[H]
     \centering
@@ -380,13 +431,17 @@ In the uniform distribution the values are more compact around the mean, unlike 
     \caption{Dropped packets distribution (uniform)}
 \end{figure}
 
+\begin{flushleft}
 Since base stations use the policy where packets are served locally, a higher queue length might mean a higher number of discarded packets. Even though, the system can still sustain the load in the uniform case as the number of discarded packets is lower than $10$.
 
+\vspace{1em} 
+
 Not the same for the lognormal case, where the total of discarded packets is over $2.5\times10^5$ units.
+\end{flushleft}
 
 \vspace{10mm}
 
-\subsubsection*{Case $S=10^4$}
+\subsubsection*{Case $S=\frac{1}{10^4}$}
 
 \begin{figure}[H]
     \centering
@@ -426,10 +481,12 @@ This experiment shows how the system can better sustain the load in the lognorma
     \caption{Dropped packets distribution (uniform)}
 \end{figure}
 
+\begin{flushleft}
 Also the distribution of dropped packets is similar, presenting more concentrated values in the lognormal case.
+\end{flushleft}
 
 \subsection{Size rate variation - Method B}
-\subsubsection*{Case $S=10^3$}
+\subsubsection*{Case $S=\frac{1}{10^3}$}
 
 \begin{figure}[H]
     \centering
@@ -457,7 +514,10 @@ As we can see the performance of the system improves with respect to the method 
     \caption{$E[qlen]$ for the uniform distribution}
 \end{figure}
 
+
+\begin{flushleft}
 The same reasoning can be applied to the mean leangth of each queue, as the plots show the exact same behaviour.
+\end{flushleft}
 
 \begin{figure}[H]
     \centering
@@ -471,9 +531,12 @@ The same reasoning can be applied to the mean leangth of each queue, as the plot
     \caption{Forwarded packets distribution (uniform)}
 \end{figure}
 
+\begin{flushleft}
 It is curious that in the lognormal case packets tend to be forwarded to one particular base station unlike the uniform case, where are forwarded more evenly. The lognormal case presents a higher number of forwarded packets ($5.9\times10^6$ vs $4.3\times10^6$).
+\vspace{1em}
 
 Dropped packets are not mentioned as there has been none throughout the experiment.
+\end{flushleft}
 % LOG
 % Total Dropped Packets: 0
 % Total Forwarded Packets: 5959327
@@ -481,7 +544,7 @@ Dropped packets are not mentioned as there has been none throughout the experime
 % Total Dropped Packets: 0
 % Total Forwarded Packets: 4390846
 
-\subsubsection*{Case $S=10^4$}
+\subsubsection*{Case $S=\frac{1}{10^4}$}
 
 \begin{figure}[H]
     \centering
@@ -509,10 +572,12 @@ In this case it is cear that the system is stressed out in both the distribution
 %     \caption{$E[qlen]$ for the uniform distribution}
 % \end{figure}
 
+\begin{flushleft}
 The same reasoning can be applied to the mean leangth of each queue, as the plots show the exact same behaviour.
+\vspace{1em}
 
 Since for both cases the plots are the same, it is shown the one relative to the lognormal distribution only.
-
+\end{flushleft}
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{img/plots/log_1e4_B/forwarded.png}
@@ -525,9 +590,12 @@ Since for both cases the plots are the same, it is shown the one relative to the
     \caption{Forwarded packets distribution (uniform)}
 \end{figure}
 
+\begin{flushleft}
 It is shown the same behaviour as in the method A, the only difference is that in the uniform case packets are forwarded more evenly among all the base stations.
+\vspace{1em}
 
 We report a total of $9.7\times10^6$ forwarded packets for the uniform and $11.4\times10^6$ for the lognormal.
+\end{flushleft}
 
 \begin{figure}[H]
     \centering
@@ -541,9 +609,12 @@ We report a total of $9.7\times10^6$ forwarded packets for the uniform and $11.4
     \caption{Dropped packets distribution (uniform)}
 \end{figure}
 
+\begin{flushleft}
 As we can expect base stations that forward the majority of the packets are the ones that discard few of them and vice versa. We encounter this phenomenon for both the distributions.
+\vspace{1em}
 
 We report the same number of discarded packets both for the lognormal and the uniform distribution.
+\end{flushleft}
 
 % UNI
 % Total Dropped Packets: 12284013
@@ -551,6 +622,10 @@ We report the same number of discarded packets both for the lognormal and the un
 % LOG
 % Total Dropped Packets: 12285154
 % Total Forwarded Packets: 11440655
+
+\chapter{Conclusion}
 \appendix
 
+\bibliographystyle{ieeetr}
+\bibliography{bibliografia.bib}
 \end{document}
