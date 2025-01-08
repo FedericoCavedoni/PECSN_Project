@@ -67,14 +67,16 @@
 
 In recent years, the rapid growth of mobile devices and wireless networks has led to a dramatic increase in the demand for efficient and low-latency computational services.
 Traditional cloud computing architectures, while powerful, often suffer from latency issues due to the physical distance between end-users and centralized data centers.
-To address these challenges, \textit{edge computing} has emerged as a promising paradigm by decentralizing computational resources closer to the users, significantly reducing latency and improving service quality.\\\\
-This report focuses on evaluating the performance of a cellular network enhanced with edge computing capabilities. The system under study consists of $M$ base stations arranged in a 2D floorplan of size $L \times H$ according to a regular grid. Each base station is equipped with computational resources and processes user-generated tasks following a \textit{First Come First Served} (FCFS) policy. Additionally, all base stations are interconnected via a mesh topology, allowing communication and task forwarding between them.\\\\
-Users are distributed across the floorplan and generate computational tasks at regular intervals. These tasks are sent to the geographically closest base station, which can either process the task locally or forward it to a less-loaded neighboring base station. This introduces a trade-off between processing delays and task-forwarding latency, which depends on the system's load and user distribution.
+To address these challenges, \textit{edge computing} has emerged as a promising paradigm by decentralizing computational resources closer to the users, significantly reducing latency and improving service quality.
+This report focuses on evaluating the performance of a cellular network enhanced with edge computing capabilities. The system under study consists of $M$ base stations arranged in a 2D floorplan of size $L \times H$ according to a regular grid.
+Each base station is equipped with computational resources and processes user-generated tasks following a \textit{First Come First Served} (FCFS) policy. Additionally, all base stations are interconnected via a mesh topology, allowing communication and task forwarding between them.
+Users are distributed across the floorplan and generate computational tasks at regular intervals.
+These tasks are sent to the geographically closest base station, which can either process the task locally or forward it to a less-loaded neighboring base station. This introduces a trade-off between processing delays and task-forwarding latency, which depends on the system's load and user distribution.
 
 \section{Problem Description}
 
 We consider $N$ users placed at random locations \texttt{(x, y)} within the same 2D floorplan of size $L \times H$, where the coordinates \texttt{x} and \texttt{y} are random variables to be defined based on specific distributions.
-Each user generates a new computational task request every $T$ seconds, and each task consists of $I$ instructions to be executed. Both $T$ and $I$ are exponentially distributed random variables.\\\\
+Each user generates a new computational task request every $T$ seconds, and each task consists of $I$ instructions to be executed. Both $T$ and $I$ are exponentially distributed random variables.
 A user sends each new task request to its closest serving base station, which can process the task using one of the following methods:
 \begin{itemize}
     \item \textbf{(A)} Serve the request locally at the receiving base station.
@@ -121,8 +123,8 @@ The analysis presented in this report provides insights into the trade-offs and 
 \end{figure}
 
 The system under study is represented by the scheme shown in \autoref{scheme}. Each base station is modeled as an \texttt{M/M/1/K} queuing system, where $\lambda_i$ represents the arrival rate of tasks at base station $i$, and $\mu$ is the service rate.
-Both $\lambda_i$ and $\mu$ are exponentially distributed random variables, which aligns with the Markovian assumptions commonly used in queuing theory. The queues are of finite length, with a maximum capacity of $K$ slots per base station. Any tasks arriving at a base station with a full queue are discarded.\\\\
-The system consists of $N$ users generating tasks at an interarrival rate $\lambda$. These tasks are routed to one of the available base stations according to their proximity and load. The system supports task forwarding between base stations, as indicated by the probabilities $p_{ij}$, which represent the likelihood of a task being forwarded from base station $i$ to base station $j$. Forwarding introduces an additional latency, which is assumed to be constant for all base stations.\\\\
+Both $\lambda_i$ and $\mu$ are exponentially distributed random variables, which aligns with the Markovian assumptions commonly used in queuing theory. The queues are of finite length, with a maximum capacity of $K$ slots per base station. Any tasks arriving at a base station with a full queue are discarded.
+The system consists of $N$ users generating tasks at an interarrival rate $\lambda$. These tasks are routed to one of the available base stations according to their proximity and load. The system supports task forwarding between base stations, as indicated by the probabilities $p_{ij}$, which represent the likelihood of a task being forwarded from base station $i$ to base station $j$. Forwarding introduces an additional latency, which is assumed to be constant for all base stations.
 As illustrated in the scheme, each task is processed according to a \textit{First Come First Served} (FCFS) policy. The finite queue length $K$ ensures that the system reflects realistic constraints, where resources are limited, and overloading results in task loss. Additionally, tasks may originate from users distributed either uniformly or according to a lognormal distribution, allowing for the evaluation of the system's performance under diverse user distributions.
 
 \section{System Parameters}
@@ -213,10 +215,12 @@ The behavior of each module is described in detail below:
 \end{itemize}
 
 \chapter{Verification}
-This chapter describes the tests performed to verify the stability and behavior of the system under various scenarios, including extreme and degenerate cases. The results of these simulations help validate the robustness, consistency, and correctness of the implementation.
+This chapter describes the tests performed to verify the stability and behavior of the system under various scenarios, including extreme and degenerate cases.
+The results of these simulations help validate the robustness, consistency, and correctness of the implementation.
 
 \section{Degeneracy Test}
-This test evaluates the system's stability and behavior under extreme or edge-case conditions. The goal is to ensure that the system remains robust and operates without failures or unexpected behaviors when subjected to these scenarios. By testing the system in degenerate cases, we validate its ability to handle both minimal and excessive loads reliably.
+This test evaluates the system's stability and behavior under extreme or edge-case conditions. The goal is to ensure that the system remains robust and operates without failures or unexpected behaviors when subjected to these scenarios.
+By testing the system in degenerate cases, we validate its ability to handle both minimal and excessive loads reliably.
 
 \subsection{Scenario 1 - No Users}
 In this degenerate scenario, no users are present in the system. As expected, the system remains stable because there are no packets to process or forward. This verifies the correctness of the system's behavior in edge cases with no load.
@@ -241,7 +245,7 @@ The system demonstrates robustness under these conditions, maintaining a stable 
 \end{figure}
 
 \subsection{Scenario 3 - Very Low Service Rate}
-This scenario evaluates the system when the service rate is significantly lower than the interarrival rate. \\\\
+This scenario evaluates the system when the service rate is significantly lower than the interarrival rate. 
 The simulations show that the queue length stabilizes very fast (\autoref{avg_ql_3}), while the response time exhibits a \textit{linear growth} over time (\autoref{avg_rt_3}). This behavior is consistent with expectations under such extreme conditions.
 
 \begin{figure}[H]
@@ -259,7 +263,7 @@ The simulations show that the queue length stabilizes very fast (\autoref{avg_ql
 \end{figure}
 
 \section{Consistency Test}
-This test verifies that the system produces coherent results under both configurations: \textit{Locally Managed} and \textit{Forwarding}. \\\\
+This test verifies that the system produces coherent results under both configurations: \textit{Locally Managed} and \textit{Forwarding}. 
 The results indicate similar mean response times, with the forwarding configuration showing a slight advantage. However, the forwarding configuration also exhibits lower variability, as seen in \autoref{avg_rt_a} and \autoref{avg_rt_b}.
 
 \begin{figure}[H]
@@ -332,7 +336,11 @@ The following factors remain constant throughout our experiments:
         \item Standard Deviation: 0.4
     \end{itemize}
 \end{itemize}
-The number of base stations ($M = 9$) aims to reflect a moderately sized area with multiple sites, balancing suburban and urban deployments. The dimensions of the area ($1800\,m \times 1800\,m$) were chosen to represent a typical environment where base stations are neither too sparse nor too dense. The service rate of $10^5$ packets/second, along with a 50\,ms delay and a queue size of 50, is used to simulate a realistic cellular-network-like environment where moderate buffering and short delays are expected. Finally, the log-normal distribution (characterized by the specified mean and standard deviation) models the spatial distribution of users. This distribution is particularly suitable for analyzing cases where user concentration is uneven across the area, such as in scenarios with hotspots and sparse regions.
+The number of base stations ($M = 9$) aims to reflect a moderately sized area with multiple sites, balancing suburban and urban deployments.
+The dimensions of the area ($1800\,m \times 1800\,m$) were chosen to represent a typical environment where base stations are neither too sparse nor too dense.
+The service rate of $10^5$ packets/second, along with a 50\,ms delay and a queue size of 50, is used to simulate a realistic cellular-network-like environment where moderate buffering and short delays are expected.
+Finally, the log-normal distribution (characterized by the specified mean and standard deviation) models the spatial distribution of users.
+This distribution is particularly suitable for analyzing cases where user concentration is uneven across the area, such as in scenarios with hotspots and sparse regions.
 
 \subsection{Varying Factors}
 The following factors vary to represent different scenarios and test system performance under varying conditions:
@@ -360,9 +368,11 @@ The following factors vary to represent different scenarios and test system perf
 The combination of these parameters enables us to evaluate the system under a broad range of realistic conditions, from moderate loads with fewer users and smaller data sizes to extreme loads with higher user counts, larger data sizes, and higher arrival rates. These variations ensure that the analysis is comprehensive and captures critical performance metrics under both typical and challenging conditions.
 
 \section{Warmup Time Analysis}
-Warmup time refers to the period during which the system transitions from an initial transient state to a steady state. Properly setting the warmup time ensures that the system's performance metrics are evaluated only during the steady-state period, avoiding bias caused by the initial transient.\\\\
-In our analysis, we observed the response time as a function of time. As shown in Figure~\ref{fig:warmup_time}, the response time stabilizes and reaches a steady state within 100 seconds. The transient period, characterized by larger variations in response time, does not exceed 100 seconds across all experiments.\\\\
-Based on these observations, the warmup time is empirically set to 100 seconds. This ensures that any data collected during the transient state is excluded from the analysis, leading to more accurate and reliable results.
+Warmup time refers to the period during which the system transitions from an initial transient state to a steady state. Properly setting the warmup time ensures that the system's performance metrics are evaluated only during the steady-state period, avoiding bias caused by the initial transient.
+In our analysis, we observed the response time as a function of time. As shown in Figure~\ref{fig:warmup_time}, the response time stabilizes and reaches a steady state within 100 seconds.
+The transient period, characterized by larger variations in response time, does not exceed 100 seconds across all experiments.
+Based on these observations, the warmup time is empirically set to 100 seconds.
+This ensures that any data collected during the transient state is excluded from the analysis, leading to more accurate and reliable results.
 
 \begin{figure}[h!]
     \centering
@@ -372,9 +382,7 @@ Based on these observations, the warmup time is empirically set to 100 seconds. 
 \end{figure}
 
 \chapter{Simulation Experiments}
-\section{The effect of forwarding packets on the system}
-We test our system in both cases A and B to see the effects of forwarding packets wether the packets are generated acording to a uniform distribution or a lognormal distribution.\\\\
-The tests also take into account 3 factors:
+The experiments take into account 3 factors:
 \begin{itemize}
     \item \textbf{N}: (100, 250, 500)
     \item \textbf{Interarrival rate}: ($\frac{1}{0.1}$, $\frac{1}{0.5}$)
@@ -387,6 +395,41 @@ Considering the average case as a reference:
     \item $I=\frac{1}{0.5}$
     \item $S=\frac{1}{10^3}$
 \end{itemize}
+
+\section{How increasing the umber of users affects the system}
+A system of telecommunications should be robust to the of the number of users, meaning it has to remain functional if the situation becomes more or less crowded.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{img/Grafici/DroppedPacket Lognormal Small.png}
+    \caption{Distribution of dropped packets for lognormal distribution}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{img/Grafici/DroppedPacket Uniform differentScale Small.png}
+    \caption{Distribution of dropped packets for uniform distribution}
+\end{figure}
+
+By looking at the distribution of dropped packets we can say that (as we could expect) with an increasing number of users the number of discarded packets raises, being manageable in the uniform case for both methods except when the number of users becomes $500$.
+The lognormal case follows a worse response for method A and presents situation similar to the previous one for method B. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{img/Grafici/Lognormal Case.png}
+    \caption{Mean response time trend per number of users (lognormal)}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{img/Grafici/Uniform Case.png}
+    \caption{Mean response time trend per number of users (uniform)}
+\end{figure}
+
+Overall, in the lognormal case method B is better in all cases but in the last one (500 users). This might be caused by the fact that base stations always try to forward packets, overloading the system.
+
+The uniform case sees both methods perform the same way, with method B being the best one only in the 400 users case.
+
+\section{The effect of forwarding packets on the system}
+We test our system in both cases A and B to see the effects of forwarding packets wether the packets are generated acording to a uniform distribution or a lognormal distribution.
 
 \subsection{Size rate variation - Method A}
 \subsubsection*{Case $S=\frac{1}{10^3}$}
