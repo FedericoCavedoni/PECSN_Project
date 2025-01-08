@@ -14,7 +14,7 @@ def plot_mean_time_series(mean_series, title, ylabel, y_limits=None, x_limit=Non
         if x_limit:
             times, values = zip(*[(t, v) for t, v in zip(times, values) if x_limit[0] <= t <= x_limit[1]])
         plt.plot(times, values, label=module)
-    #plt.axhline(global_mean, color='red', linestyle='--', label=f"Global Mean = {global_mean:.2f}")
+    plt.axhline(global_mean, color='red', linestyle='--', label=f"Global Mean = {global_mean:.2f}")
     plt.title(title)
     plt.xlabel("Time (s)")
     plt.ylabel(ylabel)
