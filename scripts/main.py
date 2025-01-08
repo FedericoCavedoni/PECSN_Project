@@ -28,13 +28,13 @@ def plot_graph(file_name, SUBSAMPLE_NUMBER, SUBSAMPLE_RATE, QUEUE_Y_LIMITS, RESP
     # plot_aggregated_response_time_and_queue_length(vectors,y_limits_queue=QUEUE_Y_LIMITS,y_limits_resp=RESPONSE_Y_LIMITS,x_limit=X_LIMIT)
 
 if __name__ == "__main__":
-    file_name = "Lognormal_A_N250_I05_S1e3"
+    file_name = "Lognormal_B_N250_I05_S1e3"
     
     SUBSAMPLE_NUMBER = 100
     SUBSAMPLE_RATE = 90
     
-    QUEUE_Y_LIMITS = (0,60)
-    RESPONSE_Y_LIMITS = (0,300)
-    X_LIMIT = (100, 900)
+    QUEUE_Y_LIMITS = None #(0,60)
+    RESPONSE_Y_LIMITS = None #(0,100)
+    X_LIMIT = None #(0, 500)
     
     plot_graph(file_name, SUBSAMPLE_NUMBER, SUBSAMPLE_RATE, QUEUE_Y_LIMITS, RESPONSE_Y_LIMITS, X_LIMIT)
