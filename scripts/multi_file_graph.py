@@ -207,9 +207,9 @@ if __name__ == "__main__":
         #"Uniform_A_N250_I01_S1e3.json",
         #"Uniform_A_N250_I05_S1e3.json",
         #"Lognormal_A_N250_I01_S1e3.json",
-        "Lognormal_A_N250_I05_S1e3.json",
+        #"Lognormal_A_N250_I05_S1e3.json",
         #"Uniform_B_N250_I01_S1e3.json",
-        #"Uniform_B_N250_I05_S1e3.json",
+        "Uniform_B_N250_I05_S1e3.json",
         #"Lognormal_B_N250_I01_S1e3.json",
         "Lognormal_B_N250_I05_S1e3.json",
     ]
@@ -217,8 +217,8 @@ if __name__ == "__main__":
     SUBSAMPLE_NUMBER = 100
     SUBSAMPLE_RATE = 90
     QUEUE_Y_LIMITS = (0, 60)
-    RESPONSE_Y_LIMITS = (0, 300)
-    X_LIMIT = (0, 500)
+    RESPONSE_Y_LIMITS = (0, 600)
+    X_LIMIT = (100, 500)
 
     boxplot_whiskers = None
     # boxplot_whiskers = (5, 95)
@@ -232,3 +232,5 @@ if __name__ == "__main__":
         X_LIMIT,
         boxplot_whiskers=boxplot_whiskers
     )
+    
+    
