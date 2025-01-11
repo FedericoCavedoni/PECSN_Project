@@ -147,10 +147,10 @@ Below, we provide a detailed explanation of all the parameters used in the syste
     \item \textbf{$\lambda_i$: Interarrival rate for base station $i$} \\
     The task arrival rate for each base station $i$ depends directly on the user distribution. In the case of a \textit{uniform distribution}, users are evenly spread across the floorplan, leading to nearly balanced $\lambda_i$ values across all base stations. In contrast, for a \textit{lognormal distribution}, certain base stations may experience higher arrival rates due to user clustering in hotspots, resulting in uneven $\lambda_i$ values.
 
-    \item \textbf{$\mu$: Instruction rate (fixed)} \\
+    \item \textbf{$S$: Instruction rate (fixed)} \\
     The rate at which instructions are executed at each base station is fixed across the system and represents the computational capacity of the edge servers.
 
-    \item \textbf{Size rate: Packet size distribution (exponential)} \\
+    \item \textbf{$\mu$: Packet size distribution (exponential)} \\
     The size of each task (in instructions per packet) follows an \textit{exponential distribution}. This variability in task size directly impacts the service rate for each base station, making it effectively exponential, as the time to serve a task depends on its size.
 
     \item \textbf{$p_{ij}$: Forwarding probability} \\
@@ -391,7 +391,7 @@ Based on these observations, the warmup time is empirically set to 100 seconds. 
 We test our system in both cases A and B to see the effects of forwarding packets wether the packets are generated according to a uniform distribution or a lognormal distribution.\\\\
 The tests also take into account 3 factors:
 \begin{itemize}
-    \item \textbf{N}: (100, 250, 500)
+    \item \textbf{N}: (250, 500)
     \item \textbf{Interarrival rate}: ($\frac{1}{0.1}$, $\frac{1}{0.5}$)
     \item \textbf{Size rate}: ($\frac{1}{10^3}$, $\frac{1}{10^4}$)
 \end{itemize}
@@ -399,47 +399,131 @@ The tests also take into account 3 factors:
 Considering the average case as a reference:
 \begin{itemize}
     \item $N=250$
-    \item $I=\frac{1}{0.5}$
+    \item $\lambda=\frac{1}{0.5}$
     \item $\mu=\frac{1}{10^3}$
 \end{itemize}
 
-\section{The effect of varying the number of the users}
-A system of telecommunications should be robust to the variation of the number of users, meaning it has to remain functional if the situation becomes more or less crowded.
+\section{The effect of varying the number of users}
+
+In this section, we analyze the system performance when the user population \(N\) vary. As \(N\) grows, the overall load on each base station increases, affecting both response times and queue lengths. 
+
+\subsection*{Number of User variation - Method A}
+
+\subsubsection{\textbf{Low User Number: \(N = 250\)}}
+
+When the user population is moderate (\(N = 250\)), both the uniform and lognormal distributions exhibit moderate queueing behavior. From \figurename~\ref{fig:R_A_N250}, the mean response time \(\bigl(E[R]\bigr)\) remains well below saturation for both distributions. The uniform distribution yields more predictable performance, while the lognormal distribution can generate short-lived spikes due to burstier arrivals. Overall, the uniform distribution demonstrates slightly better performance under medium load conditions.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{img/Grafici/DroppedPacket Lognormal Small.png}
-    \caption{Distribution of dropped packets for lognormal distribution}
-\end{figure}
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=\textwidth]{img/Grafici/DroppedPacket Uniform differentScale Small.png}
-    \caption{Distribution of dropped packets for uniform distribution}
+    \includegraphics[width=\textwidth]{img/plots/N-vary/R_A_N250.png}
+    \caption{Comparison of \(E[R]\) (Method~A) between uniform and lognormal distributions for \(N = 250\)}
+    \label{fig:R_A_N250}
 \end{figure}
 
 \begin{flushleft}
-By looking at the distribution of dropped packets we can say that (as we could expect) with an increasing number of users the number of discarded packets raises, being manageable in the uniform case for both methods except when the number of users becomes $500$.
-The lognormal case follows a worse response for method A and presents situation similar to the previous one for method B. 
+From \figurename~\ref{fig:Q_A_N250}, we observe that the mean queue length \(\bigl(E[qlen]\bigr)\) is low for both distributions, and packet drops are practically nonexistent. With fewer users, each base station easily manages its own queue, leading to relatively stable performance irrespective of the arrival distribution.
 \end{flushleft}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{img/Grafici/Lognormal Case.png}
-    \caption{Mean response time trend per number of users (lognormal)}
+    \includegraphics[width=\textwidth]{img/plots/N-vary/Q_A_N250.png}
+    \caption{Comparison of \(E[qlen]\) (Method~A) between uniform and lognormal distributions for \(N = 250\)}
+    \label{fig:Q_A_N250}
 \end{figure}
+
+\subsubsection{\textbf{High User Number: \(N = 500\)}}
+
+As \(N\) increases to 500, the system encounters much heavier load when relying solely on local processing (Method~A). \figurename~\ref{fig:R_A_N500} shows that the lognormal distribution seems to yield a slightly better mean response time than the uniform distribution. This apparent advantage is misleading, as it stems from the higher number of packets being dropped due to the non-uniform nature of the arrivals. 
+
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{img/Grafici/Uniform Case.png}
-    \caption{Mean response time trend per number of users (uniform)}
+    \includegraphics[width=\textwidth]{img/plots/N-vary/R_A_N500.png}
+    \caption{Comparison of \(E[R]\) (Method~A) between uniform and lognormal distributions for \(N = 500\)}
+    \label{fig:R_A_N500}
 \end{figure}
 
 \begin{flushleft}
-Overall, in the lognormal case method B is better in all cases but in the last one (500 users). This might be caused by the fact that base stations always try to forward packets, overloading the system.
+In \figurename~\ref{fig:Q_A_N500}, queue lengths \(\bigl(E[qlen]\bigr)\) reveal that, under Method~A, base stations can reach higher congestion levels when arrivals follow a lognormal distribution. This imbalance leads to occasional packet drops at overloaded stations.
 \end{flushleft}
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{img/plots/N-vary/Q_A_N500.png}
+    \caption{Comparison of \(E[qlen]\) (Method~A) between uniform and lognormal distributions for \(N = 500\)}
+    \label{fig:Q_A_N500}
+\end{figure}
+
 \begin{flushleft}
-The uniform case sees both methods perform the same way, with method B being the best one only in the 400 users case.
+To highlight the differences in dropped packets, \figurename~\ref{fig:Dropped_Boxplot} provides a comparison of the dropped packet distributions between the two scenarios. As shown, the lognormal distribution causes significantly more packet drops due to its burstier arrival patterns, particularly under heavy load conditions.
 \end{flushleft}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{img/plots/N-vary/Dropped-boxplot.png}
+    \caption{Boxplot of dropped packets (Method~A) comparing uniform and lognormal distributions}
+    \label{fig:Dropped_Boxplot}
+\end{figure}
+
+
+\subsection*{Number of User variation - Method B}
+
+\subsubsection{\textbf{Low User Number: \(N = 250\)}}
+
+Even at lower user densities (\(N = 250\)), the forwarding mechanism (Method~B) equalizes the load across base stations. \figurename~\ref{fig:R_B_N250} shows that both uniform and lognormal distributions yield comparable mean response times \(\bigl(E[R]\bigr)\). With fewer users, the forwarding strategy is not heavily taxed, but it still prevents localized spikes in queue lengths for the lognormal case. However, the performance of the uniform distribution in case A are slightly better than the one in the case B due to the delay of the forwarding.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{img/plots/N-vary/R_B_N250.png}
+    \caption{Comparison of \(E[R]\) (Method~B) between uniform and lognormal distributions for \(N = 250\)}
+    \label{fig:R_B_N250}
+\end{figure}
+
+\begin{flushleft}
+In \figurename~\ref{fig:Q_B_N250}, the mean queue lengths \(\bigl(E[qlen]\bigr)\) for both distributions are again modest, and few—if any—packet drops occur. Offloading surplus tasks to neighboring base stations mitigates short-term congestion in lognormal arrivals, ensuring stable performance.
+\end{flushleft}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{img/plots/N-vary/Q_B_N250.png}
+    \caption{Comparison of \(E[qlen]\) (Method~B) between uniform and lognormal distributions for \(N = 250\)}
+    \label{fig:Q_B_N250}
+\end{figure}
+
+\subsubsection{\textbf{High User Number: \(N = 500\)}}
+
+At higher user densities (\(N = 500\)), \figurename~\ref{fig:R_B_N500} indicates that Method~B continues to effectively balance the load. Mean response times \(\bigl(E[R]\bigr)\) remain relatively close for both the uniform and lognormal distributions. However, the lognormal case shows slightly better perfotmance than the uniform case, due to the more packets dropped, even tho this phenomenon is lower than the method A due to the balancing of the forwaring procedure.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{img/plots/N-vary/R_B_N500.png}
+    \caption{Comparison of \(E[R]\) (Method~B) between uniform and lognormal distributions for \(N = 500\)}
+    \label{fig:R_B_N500}
+\end{figure}
+
+\begin{flushleft}
+\figurename~\ref{fig:Q_B_N500} shows how the queue lengths \(\bigl(E[qlen]\bigr)\) remain balanced across the network in both arrival scenarios. Even there the phenomenon of the uneven distribution is present, minimized by the forwarding procedure.
+\end{flushleft}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{img/plots/N-vary/Q_B_N500.png}
+    \caption{Comparison of \(E[qlen]\) (Method~B) between uniform and lognormal distributions for \(N = 500\)}
+    \label{fig:Q_B_N500}
+\end{figure}
+
+\begin{flushleft}
+Finally, \figurename~\ref{fig:D_Box_Log_B_N500} presents the dropped-packet counts for the lognormal distribution under Method~B at the highest load (i.e., \(N = 500\)). Drops for the lognormal distribution remain high but are way lower than the drops for tthe option A, demonstrating the forwarding mechanism’s success in offloading traffic to avoid per-base-station saturation.
+The performance of the uniform case are slightly worse, due to the unnecessary forwarding delay.
+\end{flushleft}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{img/plots/N-vary/D_Box_Log_B_N500.png}
+    \caption{Dropped packets for the lognormal distribution at \(N = 500\) (Method~B)}
+    \label{fig:D_Box_Log_B_N500}
+\end{figure}
+
+
 
 \section{The effect of varying the size rate}
 In this section, we investigate the performance of the system while changing the size rate, denoted by $S$. 
@@ -603,12 +687,6 @@ It is curious that in the lognormal case packets tend to be forwarded to one par
 
 Dropped packets are not mentioned as there has been none throughout the experiment.
 \end{flushleft}
-% LOG
-% Total Dropped Packets: 0
-% Total Forwarded Packets: 5959327
-% UNI
-% Total Dropped Packets: 0
-% Total Forwarded Packets: 4390846
 
 \subsubsection*{High size rate: $\mu=\frac{1}{10^4}$}
 
@@ -633,12 +711,6 @@ As a result, the performance appears similar for both cases.
     \includegraphics[width=\textwidth]{img/plots/log_1e4_B/qlen.png}
     \caption{$E[qlen]$ for the lognormal distribution}
 \end{figure}
-
-% \begin{figure}[H]
-%     \centering
-%     \includegraphics[width=\textwidth]{img/plots/uni_1e4_B/qlen.png}
-%     \caption{$E[qlen]$ for the uniform distribution}
-% \end{figure}
 
 \begin{flushleft}
 The same reasoning can be applied to the mean leangth of each queue, as the plots show the exact same behaviour.
@@ -684,22 +756,12 @@ As we can expect base stations that forward the majority of the packets are the 
 We report the same number of discarded packets both for the lognormal and the uniform distribution.
 \end{flushleft}
 
-% UNI
-% Total Dropped Packets: 12284013
-% Total Forwarded Packets: 9762424
-% LOG
-% Total Dropped Packets: 12285154
-% Total Forwarded Packets: 11440655
-
-
-
-
 \section{The effect of varying the interarrival rate}
-In this section, we investigate the performance of the system while changing the interarrival rate, denoted by $I$. 
+In this section, we investigate the performance of the system while changing the interarrival rate, denoted by $\lambda$. 
 
 \subsection{Interarrival rate variation -- Method A}
 
-\subsubsection*{High interarrival rate: $I = \frac{1}{0.1}$}
+\subsubsection*{High interarrival rate: $\lambda = \frac{1}{0.1}$}
 
 \begin{figure}[H]
     \centering
@@ -734,7 +796,7 @@ The boxplot analysis highlights the variability of the response time in the \emp
 
 \vspace{10mm}
 
-\subsubsection*{Moderate interarrival rate: $I = \frac{1}{0.5}$} 
+\subsubsection*{Moderate interarrival rate: $\lambda = \frac{1}{0.5}$} 
 
 \begin{figure}[H] 
     \centering 
@@ -756,7 +818,7 @@ The mean queue length ($E[qlen]$) remains relatively stable across the base stat
 
 
 \subsection{Interarrival rate variation -- Method B}
-\subsubsection*{High interarrival rate: $I = \frac{1}{0.1}$}
+\subsubsection*{High interarrival rate: $\lambda = \frac{1}{0.1}$}
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{img/plots/I-vary/R_B_I01.png}
@@ -787,7 +849,7 @@ The second plot illustrates the mean queue lengths ($E[qlen]$), which also show 
 The third plot highlights the forwarding mechanism's impact on the lognormal distribution. Packets are always directed to the less-loaded basestation, which efficiently handle the load and balance the packets into the network.
 \end{flushleft}
 
-\subsubsection*{Moderate interarrival rate: $I = \frac{1}{0.5}$}
+\subsubsection*{Moderate interarrival rate: $\lambda = \frac{1}{0.5}$}
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{img/plots/I-vary/R_B_I05.png}
