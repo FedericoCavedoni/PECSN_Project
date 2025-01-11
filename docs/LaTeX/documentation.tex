@@ -66,13 +66,19 @@
 
 \chapter{Introduction}
 
-In recent years, the rapid growth of mobile devices and wireless networks has led to a dramatic increase in the demand for efficient and low-latency computational services. Traditional cloud computing architectures, while powerful, often suffer from latency issues due to the physical distance between end-users and centralized data centers. To address these challenges, \textit{edge computing} has emerged as a promising paradigm by decentralizing computational resources closer to the users, significantly reducing latency and improving service quality.\\\\
-This report focuses on evaluating the performance of a cellular network enhanced with edge computing capabilities. The system under study consists of $M$ base stations arranged in a 2D floorplan of size $L \times H$ according to a regular grid. Each base station is equipped with computational resources and processes user-generated tasks following a \textit{First Come First Served} (FCFS) policy. Additionally, all base stations are interconnected via a mesh topology, allowing communication and task forwarding between them.\\\\
-Users are distributed across the floorplan and generate computational tasks at regular intervals. These tasks are sent to the geographically closest base station, which can either process the task locally or forward it to a less-loaded neighboring base station. This introduces a trade-off between processing delays and task-forwarding latency, which depends on the system's load and user distribution.
+In recent years, the rapid growth of mobile devices and wireless networks has led to a dramatic increase in the demand for efficient and low-latency computational services.
+Traditional cloud computing architectures, while powerful, often suffer from latency issues due to the physical distance between end-users and centralized data centers.
+To address these challenges, \textit{edge computing} has emerged as a promising paradigm by decentralizing computational resources closer to the users, significantly reducing latency and improving service quality.\\\\
+This report focuses on evaluating the performance of a cellular network enhanced with edge computing capabilities. The system under study consists of $M$ base stations arranged in a 2D floorplan of size $L \times H$ according to a regular grid.
+Each base station is equipped with computational resources and processes user-generated tasks following a \textit{First Come First Served} (FCFS) policy. Additionally, all base stations are interconnected via a mesh topology, allowing communication and task forwarding between them.\\\\
+Users are distributed across the floorplan and generate computational tasks at regular intervals.
+These tasks are sent to the geographically closest base station, which can either process the task locally or forward it to a less-loaded neighboring base station.
+This introduces a trade-off between processing delays and task-forwarding latency, which depends on the system's load and user distribution.
 
 \section{Problem Description}
 
-We consider $N$ users placed at random locations \texttt{(x, y)} within the same 2D floorplan of size $L \times H$, where the coordinates \texttt{x} and \texttt{y} are random variables to be defined based on specific distributions. Each user generates a new computational task request every $T$ seconds, and each task consists of $I$ instructions to be executed. Both $T$ and $I$ are exponentially distributed random variables.\\\\
+We consider $N$ users placed at random locations \texttt{(x, y)} within the same 2D floorplan of size $L \times H$, where the coordinates \texttt{x} and \texttt{y} are random variables to be defined based on specific distributions.
+Each user generates a new computational task request every $T$ seconds, and each task consists of $I$ instructions to be executed. Both $T$ and $I$ are exponentially distributed random variables.\\\\
 A user sends each new task request to its closest serving base station, which can process the task using one of the following methods:
 \begin{itemize}
     \item \textbf{(A)} Serve the request locally at the receiving base station.
@@ -118,9 +124,15 @@ The analysis presented in this report provides insights into the trade-offs and 
     \label{scheme}
 \end{figure}
 
-The system under study is represented by the scheme shown in \autoref{scheme}. Each base station is modeled as an \texttt{M/M/1/K} queuing system, where $\lambda_i$ represents the arrival rate of tasks at base station $i$, and $\mu$ is the service rate. Both $\lambda_i$ and $\mu$ are exponentially distributed random variables, which aligns with the Markovian assumptions commonly used in queuing theory. The queues are of finite length, with a maximum capacity of $K$ slots per base station. Any tasks arriving at a base station with a full queue are discarded.\\\\
-The system consists of $N$ users generating tasks at an interarrival rate $\lambda$. These tasks are routed to one of the available base stations according to their proximity and load. The system supports task forwarding between base stations, as indicated by the probabilities $p_{ij}$, which represent the likelihood of a task being forwarded from base station $i$ to base station $j$. Forwarding introduces an additional latency, which is assumed to be constant for all base stations.\\\\
-As illustrated in the scheme, each task is processed according to a \textit{First Come First Served} (FCFS) policy. The finite queue length $K$ ensures that the system reflects realistic constraints, where resources are limited, and overloading results in task loss. Additionally, tasks may originate from users distributed either uniformly or according to a lognormal distribution, allowing for the evaluation of the system's performance under diverse user distributions.
+The system under study is represented by the scheme shown in \autoref{scheme}. Each base station is modeled as an \texttt{M/M/1/K} queuing system, where $\lambda_i$ represents the arrival rate of tasks at base station $i$, and $\mu$ is the service rate.
+Both $\lambda_i$ and $\mu$ are exponentially distributed random variables, which aligns with the Markovian assumptions commonly used in queuing theory.
+The queues are of finite length, with a maximum capacity of $K$ slots per base station. Any tasks arriving at a base station with a full queue is discarded.\\\\
+The system consists of $N$ users generating tasks at an interarrival rate $\lambda$. These tasks are routed to one of the available base stations according to their proximity and load.
+The system supports task forwarding between base stations, as indicated by the probabilities $p_{ij}$, which represent the likelihood of a task being forwarded from base station $i$ to base station $j$.
+Forwarding introduces an additional latency, which is assumed to be constant for all base stations.\\\\
+As illustrated in the scheme, each task is processed according to a \textit{First Come First Served} (FCFS) policy. 
+The finite queue length $K$ ensures that the system reflects realistic constraints, where resources are limited, and overloading results in task loss.
+Additionally, tasks may originate from users distributed either uniformly or according to a lognormal distribution, allowing for the evaluation of the system's performance under diverse user distributions.
 
 \section{System Parameters}
 Below, we provide a detailed explanation of all the parameters used in the system model, with specific emphasis on their dependencies and characteristics:
@@ -219,7 +231,7 @@ This test evaluates the system's stability and behavior under extreme or edge-ca
 In this degenerate scenario, no users are present in the system. As expected, the system remains stable because there are no packets to process or forward. This verifies the correctness of the system's behavior in edge cases with no load.
 
 \subsection{Scenario 2 - Very High Number of Users}
-This scenario tests the system under an extreme load with a very high number of users ($N = 500$) and only two base stations ($M = 4$). 
+This scenario tests the system under an extreme load with a very high number of users ($N = 500$) and four base stations ($M = 4$). 
 
 \begin{flushleft}
 The system demonstrates robustness under these conditions, maintaining a stable \textit{queue length} and consistent \textit{response time}. However, the queue is always full, leading to a significant number of dropped packets, and the \textit{response time} stabilizes due to the saturated queue. The results are shown in \autoref{avg_ql_2} and \autoref{avg_rt_2}, confirming that the system can handle significant load without degenerating.
@@ -319,7 +331,7 @@ The following factors remain constant throughout our experiments:
     %
     \item \textbf{Dimensions of the area}: height = 1800\,m, width = 1800\,m
     %
-    \item \textbf{Service rate}: $10^5$ (packets/second)
+    \item \textbf{Service rate}: $10^5$ (instructions/second)
     %
     \item \textbf{Delay}: 50\,ms
     %
@@ -331,7 +343,11 @@ The following factors remain constant throughout our experiments:
         \item Standard Deviation: 0.4
     \end{itemize}
 \end{itemize}
-The number of base stations ($M = 9$) aims to reflect a moderately sized area with multiple sites, balancing suburban and urban deployments. The dimensions of the area ($1800\,m \times 1800\,m$) were chosen to represent a typical environment where base stations are neither too sparse nor too dense. The service rate of $10^5$ packets/second, along with a 50\,ms delay and a queue size of 50, is used to simulate a realistic cellular-network-like environment where moderate buffering and short delays are expected. Finally, the log-normal distribution (characterized by the specified mean and standard deviation) models the spatial distribution of users. This distribution is particularly suitable for analyzing cases where user concentration is uneven across the area, such as in scenarios with hotspots and sparse regions.
+The number of base stations ($M = 9$) aims to reflect a moderately sized area with multiple sites, balancing suburban and urban deployments.
+The dimensions of the area ($1800\,m \times 1800\,m$) were chosen to represent a typical environment where base stations are neither too sparse nor too dense.
+The service rate of $10^5$ instructions/second, along with a 50\,ms delay and a queue size of 50, is used to simulate a realistic cellular-network-like environment where moderate buffering and short delays are expected.
+Finally, the log-normal distribution (characterized by the specified mean and standard deviation) models the spatial distribution of users.
+This distribution is particularly suitable for analyzing cases where user concentration is uneven across the area, such as in scenarios with hotspots and sparse regions.
 
 \subsection{Varying Factors}
 The following factors vary to represent different scenarios and test system performance under varying conditions:
@@ -360,7 +376,7 @@ The combination of these parameters enables us to evaluate the system under a br
 
 \section{Warmup Time Analysis}
 Warmup time refers to the period during which the system transitions from an initial transient state to a steady state. Properly setting the warmup time ensures that the system's performance metrics are evaluated only during the steady-state period, avoiding bias caused by the initial transient.\\\\
-In our analysis, we observed the response time as a function of time. As shown in Figure~\ref{fig:warmup_time}, the response time stabilizes and reaches a steady state within 100 seconds. The transient period, characterized by larger variations in response time, does not exceed 100 seconds across all experiments.\\\\
+In our analysis, we observed the response time as a function of time. As shown in \autoref{fig:warmup_time}, the response time stabilizes and reaches a steady state within 100 seconds. The transient period, characterized by larger variations in response time, does not exceed 100 seconds across all experiments.\\\\
 Based on these observations, the warmup time is empirically set to 100 seconds. This ensures that any data collected during the transient state is excluded from the analysis, leading to more accurate and reliable results.
 
 \begin{figure}[h!]
@@ -388,7 +404,7 @@ Considering the average case as a reference:
 \end{itemize}
 
 \section{The effect of varying the number of the users}
-A system of telecommunications should be robust to the of the number of users, meaning it has to remain functional if the situation becomes more or less crowded.
+A system of telecommunications should be robust to the variation of the number of users, meaning it has to remain functional if the situation becomes more or less crowded.
 
 \begin{figure}[H]
     \centering
@@ -507,7 +523,10 @@ Not the same for the lognormal case, where the total of discarded packets is ove
     \caption{$E[qlen]$ for the uniform distribution}
 \end{figure}
 
-In this experiment, the results suggest that the lognormal case appears to perform better; however, this improvement is only apparent. This is due to the unbalanced load distribution among the basestations: while some basestations are overloaded, others remain underutilized. As the response time saturates for the overloaded basestations, the contribution of the underutilized ones lowers the overall average response time. This phenomenon creates the illusion of better performance in the lognormal case.
+In this experiment, the results suggest that the lognormal case appears to perform better; however, this improvement is only apparent.
+This is due to the unbalanced load distribution among the basestations: while some basestations are overloaded, others remain underutilized.
+As the response time saturates for the overloaded basestations, the contribution of the underutilized ones lowers the overall average response time.
+This phenomenon creates the illusion of better performance in the lognormal case.
 
 \begin{figure}[H]
     \centering
@@ -544,7 +563,10 @@ Moreover, the packet drops occur in a non-uniform manner, further highlighting t
     \caption{$E[R]$ for the uniform distribution}
 \end{figure}
 
-As we can observe, the performance of the system improves compared to method A only when dealing with the lognormal distribution. In the uniform case, we can see an higher response time because the load is already evenly distributed across the network and the method B add the forwarding delay. Conversely, in the lognormal case, the improvement is significant due to better balancing of the load that would otherwise remain unevenly distributed. This balancing effect enhances the overall efficiency of the network under the lognormal distribution.
+As we can observe, the performance of the system improves compared to method A only when dealing with the lognormal distribution.
+In the uniform case, we can see an higher response time because the load is already evenly distributed across the network and the method B add the forwarding delay.
+Conversely, in the lognormal case, the improvement is significant due to better balancing of the load that would otherwise remain unevenly distributed.
+This balancing effect enhances the overall efficiency of the network under the lognormal distribution.
 
 \begin{figure}[H]
     \centering
@@ -602,7 +624,9 @@ Dropped packets are not mentioned as there has been none throughout the experime
     \caption{$E[R]$ for the uniform distribution}
 \end{figure}
 
-In this case, it is clear that the system is stressed out in both distributions, with almost equal mean response times. The queue is always full, leading to a saturated response time. All the values of the basestations are concentrated around the global mean, which reflects the fact that all of them respond at nearly the same speed due to the saturation effect. As a result, the performance appears similar for both cases.
+In this case, it is clear that the system is stressed out in both distributions, with almost equal mean response times. The queue is always full, leading to a saturated response time.
+All the values of the basestations are concentrated around the global mean, which reflects the fact that all of them respond at nearly the same speed due to the saturation effect.
+As a result, the performance appears similar for both cases.
 
 \begin{figure}[H]
     \centering
@@ -683,7 +707,8 @@ In this section, we investigate the performance of the system while changing the
     \caption{$E[R]$ comparison between Uniform and Lognormal distributions}
 \end{figure}
 
-The system experiences a significantly higher load with $I = \frac{1}{0.1}$, resulting in increased mean response times for both distributions. The \emph{lognormal} case initially appears to perform better, as it exhibits a lower mean response time compared to the \emph{uniform} distribution. However, this difference is misleading, as the response time saturates at 500 ms due to the limited queue size.
+The system experiences a significantly higher load with $I = \frac{1}{0.1}$, resulting in increased mean response times for both distributions. The \emph{lognormal} case initially appears to perform better, as it exhibits a lower mean response time compared to the \emph{uniform} distribution. 
+However, this difference is misleading, as the response time saturates at 500 ms due to the limited queue size.
 
 \begin{figure}[H]
     \centering
@@ -716,7 +741,9 @@ The boxplot analysis highlights the variability of the response time in the \emp
     \includegraphics[width=\textwidth]{img/plots/I-vary/R_Box_A_I05.png} \caption{$E[R]$ comparison between uniform and lognormal distribution}
 \end{figure}
 
-In this experiment, the interarrival rate is moderate compared to the previous case, resulting in a less congested system. The comparison between the uniform and lognormal distributions shows that the uniform distribution yields better performance in terms of mean response time ($E[R]$). This is because the uniform distribution spreads arrivals more evenly over time, reducing the likelihood of sudden bursts that can temporarily increase congestion.
+In this experiment, the interarrival rate is moderate compared to the previous case, resulting in a less congested system.
+The comparison between the uniform and lognormal distributions shows that the uniform distribution yields better performance in terms of mean response time ($E[R]$).
+This is because the uniform distribution spreads arrivals more evenly over time, reducing the likelihood of sudden bursts that can temporarily increase congestion.
 
 \begin{figure}[H] 
     \centering 
@@ -736,7 +763,9 @@ The mean queue length ($E[qlen]$) remains relatively stable across the base stat
     \caption{Comparison of $E[R]$ between uniform and lognormal distributions with Method~B}
 \end{figure}
 
-Under Method~B, the forwarding strategy effectively balances the system load, reducing congestion for both the uniform and lognormal distributions. As shown in the plot, the mean response time ($E[R]$) is very similar for the two distributions, with no significant differences. This demonstrates that the forwarding mechanism mitigates the effects of bursty arrivals typically associated with the lognormal distribution, aligning its performance closely with that of the uniform distribution.
+Under Method~B, the forwarding strategy effectively balances the system load, reducing congestion for both the uniform and lognormal distributions.
+As shown in the plot, the mean response time ($E[R]$) is very similar for the two distributions, with no significant differences.
+This demonstrates that the forwarding mechanism mitigates the effects of bursty arrivals typically associated with the lognormal distribution, aligning its performance closely with that of the uniform distribution.
 
 \begin{figure}[H]
     \centering
@@ -801,9 +830,18 @@ Finally, the fourth plot shows the mean number of dropped packets under Method~A
 
 \chapter{Conclusions}
 In this project, we evaluated the performance of an edge computing-enabled cellular network under two different user distributions (uniform and lognormal) and two service options (A: local service, B: service forwarding).\\\\
-For the \textbf{uniform user distribution}, our results indicate that \textbf{Option~A} is more efficient. Since users are already evenly distributed, forwarding requests to a less-loaded base station does not provide significant benefits. In fact, the additional latency introduced by the forwarding process in \textbf{Option~B} results in increased response times. Consequently, when the user locations are uniformly spread, serving tasks locally (\textbf{Option~A}) emerges as the preferable strategy.\\\\
-Conversely, for the \textbf{lognormal distribution}, the load is highly imbalanced across the base stations when applying \textbf{Option~A}. A few base stations receive a disproportionate share of requests, becoming overloaded, whereas others remain largely unused. The forwarding strategy of \textbf{Option~B} alleviates this imbalance by distributing the workload more evenly, which substantially improves overall performance. As a result, under lognormal user distribution, \textbf{Option~B} is the superior choice.\\\\
-In addition to these findings, future research could explore hybrid strategies that combine local serving and forwarding in a more adaptive manner, potentially leveraging real-time network measurements. Furthermore, investigating more complex or realistic user distributions and refining the latency models for inter-base-station communication could provide deeper insights into the performance of edge computing-based systems in next-generation cellular networks.
+For the \textbf{uniform user distribution}, our results indicate that \textbf{Option~A} is more efficient.
+Since users are already evenly distributed, forwarding requests to a less-loaded base station does not provide significant benefits.
+In fact, the additional latency introduced by the forwarding process in \textbf{Option~B} results in increased response times.
+Consequently, when the user locations are uniformly spread, serving tasks locally (\textbf{Option~A}) emerges as the preferable strategy.
+\\\
+Conversely, for the \textbf{lognormal distribution}, the load is highly imbalanced across the base stations when applying \textbf{Option~A}.
+A few base stations receive a disproportionate share of requests, becoming overloaded, whereas others remain largely unused.
+The forwarding strategy of \textbf{Option~B} alleviates this imbalance by distributing the workload more evenly, which substantially improves overall performance.
+As a result, under lognormal user distribution, \textbf{Option~B} is the superior choice.
+\\\
+In addition to these findings, future research could explore hybrid strategies that combine local serving and forwarding in a more adaptive manner, potentially leveraging real-time network measurements.
+Furthermore, investigating more complex or realistic user distributions and refining the latency models for inter-base-station communication could provide deeper insights into the performance of edge computing-based systems in next-generation cellular networks.
 
 \appendix
 \end{document}
