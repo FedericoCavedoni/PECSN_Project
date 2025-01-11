@@ -77,7 +77,7 @@ This introduces a trade-off between processing delays and task-forwarding latenc
 
 \section{Problem Description}
 
-We consider $N$ users placed at random locations \texttt{(x, y)} within the same 2D floorplan of size $L \times H$, where the coordinates \texttt{x} and \texttt{y} are random variables to be defined based on specific distributions.
+We consider $N$ users placed at random locations \texttt{(x, y)} within the same floorplan, where the coordinates \texttt{x} and \texttt{y} are random variables to be defined based on specific distributions.
 Each user generates a new computational task request every $T$ seconds, and each task consists of $I$ instructions to be executed. Both $T$ and $I$ are exponentially distributed random variables.\\\\
 A user sends each new task request to its closest serving base station, which can process the task using one of the following methods:
 \begin{itemize}
